@@ -1,0 +1,20 @@
+{
+  "classificacao": "ESQUERDA",
+  "esquerda": 100.0,
+  "direita": 0.0,
+  "confianca": "ALTA",
+  "textos_analisados": 4,
+  "pontos_esq": 5,
+  "pontos_dir": 0,
+  "top_palavras_esq": [
+    [
+      "lula",
+      5
+    ]
+  ],
+  "top_palavras_dir": [],
+  "plataformas": [
+    "Web (4 menções)"
+  ],
+  "username": "@LulaOficial"
+}

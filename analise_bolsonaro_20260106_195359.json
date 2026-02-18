@@ -1,0 +1,20 @@
+{
+  "classificacao": "ESQUERDA",
+  "esquerda": 100.0,
+  "direita": 0.0,
+  "confianca": "ALTA",
+  "textos_analisados": 5,
+  "pontos_esq": 1,
+  "pontos_dir": 0,
+  "top_palavras_esq": [
+    [
+      "federal",
+      1
+    ]
+  ],
+  "top_palavras_dir": [],
+  "plataformas": [
+    "Web (5 menções)"
+  ],
+  "username": "bolsonaro"
+}

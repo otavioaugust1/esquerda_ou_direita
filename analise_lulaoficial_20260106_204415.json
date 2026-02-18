@@ -1,0 +1,37 @@
+{
+  "classificacao": "ESQUERDA",
+  "esquerda": 92.3,
+  "direita": 7.7,
+  "confianca": "MÉDIA",
+  "textos_analisados": 15,
+  "pontos_esq": 12,
+  "pontos_dir": 1,
+  "top_palavras_esq": [
+    [
+      "lula",
+      10
+    ],
+    [
+      "democracia",
+      1
+    ],
+    [
+      "trabalhadores",
+      1
+    ]
+  ],
+  "top_palavras_dir": [
+    [
+      "reducao",
+      1
+    ]
+  ],
+  "plataformas": [
+    "Twitter/X (5)",
+    "YouTube (1)",
+    "Web (9)"
+  ],
+  "username": "lulaoficial",
+  "total_textos": 15,
+  "data_analise": "2026-01-06T20:44:15.009869"
+}

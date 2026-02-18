@@ -1,0 +1,36 @@
+{
+  "classificacao": "DIREITA",
+  "esquerda": 9.1,
+  "direita": 90.9,
+  "confianca": "MÉDIA",
+  "textos_analisados": 8,
+  "pontos_esq": 1,
+  "pontos_dir": 10,
+  "top_palavras_esq": [
+    [
+      "golpe",
+      1
+    ]
+  ],
+  "top_palavras_dir": [
+    [
+      "bolsonaro",
+      5
+    ],
+    [
+      "jair",
+      4
+    ],
+    [
+      "pl",
+      1
+    ]
+  ],
+  "plataformas": [
+    "YouTube (1)",
+    "Web (7)"
+  ],
+  "username": "jairbolsonaro",
+  "total_textos": 8,
+  "data_analise": "2026-01-06T20:45:44.862123"
+}

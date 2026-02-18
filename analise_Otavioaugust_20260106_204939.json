@@ -1,0 +1,45 @@
+{
+  "classificacao": "CENTRO-ESQUERDA",
+  "esquerda": 66.7,
+  "direita": 33.3,
+  "confianca": "BAIXA",
+  "textos_analisados": 20,
+  "pontos_esq": 6,
+  "pontos_dir": 3,
+  "top_palavras_esq": [
+    [
+      "federal",
+      1
+    ],
+    [
+      "universidade",
+      1
+    ],
+    [
+      "lula",
+      1
+    ],
+    [
+      "impeachment",
+      1
+    ],
+    [
+      "dilma",
+      1
+    ]
+  ],
+  "top_palavras_dir": [
+    [
+      "novo",
+      3
+    ]
+  ],
+  "plataformas": [
+    "Twitter/X (10)",
+    "YouTube (1)",
+    "Web (9)"
+  ],
+  "username": "Otavioaugust",
+  "total_textos": 20,
+  "data_analise": "2026-01-06T20:49:39.875740"
+}

@@ -1,0 +1,44 @@
+{
+  "classificacao": "CENTRO (equilibrado)",
+  "esquerda": 50.0,
+  "direita": 50.0,
+  "confianca": "BAIXA",
+  "textos_analisados": 19,
+  "pontos_esq": 3,
+  "pontos_dir": 3,
+  "top_palavras_esq": [
+    [
+      "federal",
+      1
+    ],
+    [
+      "lula",
+      1
+    ],
+    [
+      "universidade",
+      1
+    ]
+  ],
+  "top_palavras_dir": [
+    [
+      "liberdade",
+      1
+    ],
+    [
+      "privada",
+      1
+    ],
+    [
+      "familia",
+      1
+    ]
+  ],
+  "plataformas": [
+    "Twitter/X (10)",
+    "Web (9)"
+  ],
+  "username": "0tavioaugust",
+  "total_textos": 19,
+  "data_analise": "2026-01-06T20:47:18.485036"
+}
