@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Análise Política{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="/" class="logo">
+                <span class="logo-icon">⚖️</span>
+                <span class="logo-text">Análise Política</span>
+            </a>
+            <p class="header-sub">Estudo de orientação política a partir de publicações públicas</p>
+            <nav class="header-nav">
+                <a href="/">🔍 Analisar</a>
+                <a href="/informacoes">📚 Documentação</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p>🔬 Projeto de <strong>estudo acadêmico</strong> — Análise baseada em palavras-chave de publicações públicas.</p>
+            <p class="footer-disclaimer">Esta ferramenta não representa uma classificação definitiva. Serve apenas como exercício de análise de dados textuais.</p>
+        </footer>
+    </div>
+</body>
+</html>

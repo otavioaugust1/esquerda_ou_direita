@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Análise Política — Início{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Esquerda ou Direita?</h1>
+    <p class="hero-desc">
+        Ferramenta de <strong>estudo acadêmico</strong> que analisa a tendência política de perfis públicos
+        a partir de <strong>dados públicos</strong> em redes sociais, notícias e enciclopédias.
+    </p>
+</section>
+
+{% if erro %}
+<div class="alert alert-error">
+    <span>⚠️</span> {{ erro }}
+</div>
+{% endif %}
+
+<form action="/analisar" method="POST" class="search-form" id="formAnalise">
+    <div class="form-card">
+        <div class="input-group input-main">
+            <label for="handle">@ da Rede Social</label>
+            <div class="input-with-icon">
+                <span class="input-icon">@</span>
+                <input
+                    type="text"
+                    id="handle"
+                    name="handle"
+                    placeholder="ex: bolsonaro, LulaOficial, ciaborges"
+                    required
+                    autocomplete="off"
+                    autofocus
+                >
+            </div>
+            <small class="input-hint">Username do Twitter/X, Instagram ou Facebook (mesmo @ nas 3 redes)</small>
+        </div>
+
+        <div class="input-group">
+            <label for="nome">Nome Completo <span class="optional">(opcional)</span></label>
+            <input
+                type="text"
+                id="nome"
+                name="nome"
+                placeholder="ex: Jair Bolsonaro, Luiz Inácio Lula da Silva"
+            >
+            <small class="input-hint">Melhora a busca em notícias e Wikipédia</small>
+        </div>
+
+        <button type="submit" class="btn-primary" id="btnSubmit">
+            <span class="btn-text">🔍 Analisar Perfil</span>
+            <span class="btn-loading" style="display:none;">
+                <span class="spinner"></span> Analisando redes sociais...
+            </span>
+        </button>
+    </div>
+</form>
+
+<!-- METODOLOGIA -->
+<section class="study-section">
+    <h2>🔬 Metodologia de Análise</h2>
+    <div class="study-grid">
+        <div class="study-card">
+            <div class="study-icon">📊</div>
+            <h3>Análise por Plataforma</h3>
+            <p>Cada rede social (Twitter/X, Instagram, Facebook) é analisada <strong>separadamente</strong>.
+            Uma pessoa pode ser classificada diferente em cada rede — por exemplo, mais à esquerda no Twitter e centro no Facebook.</p>
+        </div>
+        <div class="study-card">
+            <div class="study-icon">🔤</div>
+            <h3>Palavras-chave</h3>
+            <p>O modelo usa ~90 termos politicamente associados (45 esquerda, 45 direita).
+            Cada ocorrência vale <strong>1 ponto</strong>. Nomes de figuras políticas valem <strong>2 pontos</strong>.</p>
+        </div>
+        <div class="study-card">
+            <div class="study-icon">👥</div>
+            <h3>Figuras Políticas</h3>
+            <p>Banco de ~120 perfis classificados de <strong>-2 (esquerda forte)</strong> a <strong>+2 (direita forte)</strong>.
+            Seguir uma figura politica vale <strong>3× o score</strong> — é o indicador mais confiável.</p>
+        </div>
+        <div class="study-card">
+            <div class="study-icon">⚖️</div>
+            <h3>Imprensa = Centro (0)</h3>
+            <p>Veículos como Folha, Estadão, G1, Globo e CNN Brasil recebem score <strong>0 (neutro)</strong>.
+            Segui-los não indica posição política — são acompanhados por todos os espectros.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FONTES DE DADOS -->
+<section class="info-cards">
+    <div class="info-card">
+        <div class="info-icon">🐦</div>
+        <h3>Twitter / X</h3>
+        <p>Tweets públicos + quem a pessoa segue. Fonte mais rica: a análise de <strong>seguidores</strong> revela a "bolha" política.</p>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">📸</div>
+        <h3>Instagram</h3>
+        <p>Perfil público, bio e busca por menções. Sem API pública — depende de dados acessíveis publicamente na web.</p>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">👤</div>
+        <h3>Facebook</h3>
+        <p>Páginas públicas, publicações e curtidas. Sem API pública — usa busca web para encontrar conteúdo.</p>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">📰</div>
+        <h3>Google News</h3>
+        <p>Notícias recentes via RSS. Útil para <strong>figuras públicas</strong> que aparecem na mídia com frequência.</p>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">📖</div>
+        <h3>Wikipédia</h3>
+        <p>Artigos sobre figuras públicas. Identifica filiações partidárias e posicionamentos históricos.</p>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">🔍</div>
+        <h3>DuckDuckGo</h3>
+        <p>Busca web genérica para complementar quando as APIs diretas retornam poucos resultados.</p>
+    </div>
+</section>
+
+<!-- ESCALA -->
+<section class="scale-section">
+    <h2>📐 Escala de Classificação</h2>
+    <div class="scale-bar">
+        <div class="scale-item scale-esq-forte">
+            <span class="scale-score">-2</span>
+            <span class="scale-label">Esquerda</span>
+        </div>
+        <div class="scale-item scale-esq">
+            <span class="scale-score">-1</span>
+            <span class="scale-label">Centro-Esq</span>
+        </div>
+        <div class="scale-item scale-centro">
+            <span class="scale-score">0</span>
+            <span class="scale-label">Centro</span>
+        </div>
+        <div class="scale-item scale-dir">
+            <span class="scale-score">+1</span>
+            <span class="scale-label">Centro-Dir</span>
+        </div>
+        <div class="scale-item scale-dir-forte">
+            <span class="scale-score">+2</span>
+            <span class="scale-label">Direita</span>
+        </div>
+    </div>
+    <p class="scale-desc">
+        A escala vai de <strong>-2 (esquerda forte)</strong> a <strong>+2 (direita forte)</strong>.
+        Veículos de imprensa tradicionais são mantidos em <strong>0 (centro)</strong> para não distorcer a análise.
+    </p>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="disclaimer-box">
+    <h3>⚠️ Importante — Leia antes de usar</h3>
+    <ul>
+        <li>Este é um <strong>projeto de estudo acadêmico</strong> sobre análise de dados textuais e classificação.</li>
+        <li>A classificação é baseada em <strong>palavras-chave</strong> — não utiliza IA semântica ou processamento de linguagem natural avançado.</li>
+        <li>Apenas dados <strong>públicos</strong> são coletados — respeitando a LGPD e o Marco Civil da Internet.</li>
+        <li><strong>Nenhum dado é armazenado</strong> — toda análise é processada em memória e descartada após exibição.</li>
+        <li>Instagram e Facebook não possuem APIs públicas — os melhores resultados são com <strong>Twitter/X</strong>.</li>
+        <li>O modelo <strong>não detecta ironia, sarcasmo ou citações contrárias</strong> — pode gerar falsos positivos.</li>
+        <li>Resultados com confiança BAIXA ou MUITO BAIXA devem ser interpretados com extrema cautela.</li>
+        <li>Consulte a <a href="/informacoes">documentação completa</a> para detalhes sobre metodologia, calibração e aspectos legais.</li>
+    </ul>
+</section>
+
+<script>
+document.getElementById('formAnalise').addEventListener('submit', function() {
+    var btn = document.getElementById('btnSubmit');
+    btn.querySelector('.btn-text').style.display = 'none';
+    btn.querySelector('.btn-loading').style.display = 'inline-flex';
+    btn.disabled = true;
+});
+</script>
+{% endblock %}

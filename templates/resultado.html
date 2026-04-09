@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+{% block title %}Resultado — {{ r.handle }}{% endblock %}
+
+{% block content %}
+<a href="/" class="back-link">← Nova análise</a>
+
+<section class="result-hero" style="border-color: {{ r.cor }}">
+    <div class="result-badge" style="background: {{ r.cor }}">
+        {{ r.classificacao }}
+    </div>
+    <h1>{{ r.handle }}</h1>
+    {% if r.nome and r.nome != r.handle.lstrip('@') %}
+    <p class="result-nome">{{ r.nome }}</p>
+    {% endif %}
+    <p class="result-desc">{{ r.descricao }}</p>
+    <p class="result-subtitle">Resultado combinado de todas as plataformas</p>
+</section>
+
+<!-- BARRA DE ESPECTRO GERAL -->
+<section class="spectrum-section">
+    <h2>Espectro Político — Geral</h2>
+    <div class="spectrum-bar">
+        <div class="spectrum-fill-left" style="width: {{ r.esquerda_pct }}%"></div>
+        <div class="spectrum-fill-right" style="width: {{ r.direita_pct }}%"></div>
+    </div>
+    <div class="spectrum-labels">
+        <span class="label-esq">🔴 Esquerda {{ r.esquerda_pct }}%</span>
+        <span class="label-dir">🔵 Direita {{ r.direita_pct }}%</span>
+    </div>
+</section>
+
+<!-- MÉTRICAS GERAIS -->
+<section class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-value">{{ r.total_posts }}</div>
+        <div class="metric-label">Textos analisados</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ r.pontos_esq + r.pontos_dir }}</div>
+        <div class="metric-label">Palavras políticas</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value confianca-{{ r.confianca|lower }}">{{ r.confianca }}</div>
+        <div class="metric-label">Confiança</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ r.fontes|length }}</div>
+        <div class="metric-label">Fontes consultadas</div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- ANÁLISE POR PLATAFORMA                       -->
+<!-- ============================================ -->
+
+{% if r.plataformas %}
+<section class="platform-section">
+    <h2>📊 Análise por Plataforma</h2>
+    <p class="section-desc">Cada rede social é analisada separadamente. Uma pessoa pode ter posições diferentes em cada plataforma.</p>
+
+    <!-- ABAS -->
+    <div class="platform-tabs">
+        {% for key, plat in r.plataformas.items() %}
+        <button class="platform-tab {% if loop.first %}active{% endif %}"
+                data-tab="plat-{{ key }}"
+                onclick="switchTab('plat-{{ key }}', this)">
+            <span class="tab-icon">{{ plat.icone }}</span>
+            <span class="tab-name">{{ plat.nome }}</span>
+            <span class="tab-badge" style="background: {{ plat.cor }}">{{ plat.classificacao }}</span>
+        </button>
+        {% endfor %}
+    </div>
+
+    <!-- CONTEÚDO DE CADA PLATAFORMA -->
+    {% for key, plat in r.plataformas.items() %}
+    <div class="platform-content {% if loop.first %}active{% endif %}" id="plat-{{ key }}">
+
+        <!-- Cabeçalho da plataforma -->
+        <div class="plat-header" style="border-left: 4px solid {{ plat.cor }}">
+            <div class="plat-title">
+                <span class="plat-icon">{{ plat.icone }}</span>
+                <div>
+                    <h3>{{ plat.nome }}</h3>
+                    <p class="plat-desc-coleta">{{ plat.descricao_coleta }}</p>
+                </div>
+            </div>
+            <div class="plat-badge" style="background: {{ plat.cor }}">{{ plat.classificacao }}</div>
+        </div>
+
+        <!-- Espectro da plataforma -->
+        {% if plat.esquerda_pct > 0 or plat.direita_pct > 0 %}
+        <div class="plat-spectrum">
+            <div class="spectrum-bar spectrum-bar-sm">
+                <div class="spectrum-fill-left" style="width: {{ plat.esquerda_pct }}%"></div>
+                <div class="spectrum-fill-right" style="width: {{ plat.direita_pct }}%"></div>
+            </div>
+            <div class="spectrum-labels">
+                <span class="label-esq">🔴 {{ plat.esquerda_pct }}%</span>
+                <span class="label-dir">🔵 {{ plat.direita_pct }}%</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Métricas da plataforma -->
+        <div class="plat-metrics">
+            <div class="plat-metric">
+                <span class="plat-metric-val">{{ plat.total_posts }}</span>
+                <span class="plat-metric-lbl">Textos</span>
+            </div>
+            <div class="plat-metric">
+                <span class="plat-metric-val">{{ plat.pontos_esq + plat.pontos_dir }}</span>
+                <span class="plat-metric-lbl">Palavras políticas</span>
+            </div>
+            <div class="plat-metric">
+                <span class="plat-metric-val confianca-{{ plat.confianca|lower }}">{{ plat.confianca }}</span>
+                <span class="plat-metric-lbl">Confiança</span>
+            </div>
+        </div>
+
+        <!-- Palavras-chave da plataforma -->
+        {% if plat.top_palavras_esq or plat.top_palavras_dir %}
+        <div class="plat-keywords">
+            <h4>Palavras-chave</h4>
+            <div class="keywords-grid">
+                {% if plat.top_palavras_esq %}
+                <div class="keyword-col keyword-esq">
+                    <h3>🔴 Esquerda ({{ plat.pontos_esq }})</h3>
+                    <div class="keyword-list">
+                        {% for palavra, freq in plat.top_palavras_esq %}
+                        <div class="keyword-item">
+                            <span class="keyword-word">{{ palavra }}</span>
+                            <span class="keyword-freq">{{ freq }}×</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if plat.top_palavras_dir %}
+                <div class="keyword-col keyword-dir">
+                    <h3>🔵 Direita ({{ plat.pontos_dir }})</h3>
+                    <div class="keyword-list">
+                        {% for palavra, freq in plat.top_palavras_dir %}
+                        <div class="keyword-item">
+                            <span class="keyword-word">{{ palavra }}</span>
+                            <span class="keyword-freq">{{ freq }}×</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Figuras políticas da plataforma -->
+        {% if plat.seguindo_politicos %}
+        <div class="plat-figures">
+            <h4>👥 Figuras Políticas Identificadas</h4>
+            <div class="following-grid">
+                {% for fig in plat.seguindo_politicos %}
+                <div class="following-card {% if fig.score < 0 %}fig-esq{% elif fig.score > 0 %}fig-dir{% else %}fig-centro{% endif %}">
+                    <div class="fig-indicator"></div>
+                    <div class="fig-info">
+                        <span class="fig-nome">{{ fig.nome }}</span>
+                        <span class="fig-user">@{{ fig.username }}</span>
+                    </div>
+                    <div class="fig-lado">
+                        {% if fig.score <= -2 %}🔴 ESQ
+                        {% elif fig.score == -1 %}🟠 C-E
+                        {% elif fig.score == 0 %}🟡 CEN
+                        {% elif fig.score == 1 %}🔵 C-D
+                        {% else %}🔵 DIR{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Fontes da plataforma -->
+        {% if plat.fontes %}
+        <div class="plat-sources">
+            <h4>Fontes de Dados</h4>
+            <div class="sources-grid">
+                {% for fonte, qtd in plat.fontes.items() %}
+                <div class="source-card">
+                    <div class="source-name">{{ fonte }}</div>
+                    <div class="source-count">{{ qtd }} itens</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Exemplos da plataforma -->
+        {% if plat.exemplos %}
+        <details class="plat-examples">
+            <summary>📝 Textos coletados ({{ plat.exemplos|length }})</summary>
+            <div class="examples-list">
+                {% for ex in plat.exemplos %}
+                <div class="example-item">
+                    <span class="example-source">{{ ex.fonte }}</span>
+                    <p class="example-text">{{ ex.texto }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </details>
+        {% endif %}
+
+        <!-- Log da plataforma -->
+        {% if plat.logs %}
+        <details class="plat-logs">
+            <summary>📋 Log de coleta</summary>
+            <div class="logs-list">
+                {% for log in plat.logs %}
+                <div class="log-item log-{{ log.status }}">
+                    <span class="log-fonte">{{ log.fonte }}</span>
+                    <span class="log-status">
+                        {% if log.status == 'ok' %}✅ {{ log.qtd }} itens
+                        {% elif log.status == 'erro' %}❌ {{ log.msg }}
+                        {% elif log.status == 'aviso' %}⚠️ {{ log.msg }}
+                        {% elif log.status == 'buscando' %}🔄 Buscando...
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </details>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+<!-- COMPARATIVO VISUAL -->
+{% if r.plataformas %}
+<section class="compare-section">
+    <h2>📈 Comparativo entre Plataformas</h2>
+    <div class="compare-grid">
+        {% for key, plat in r.plataformas.items() %}
+        <div class="compare-card">
+            <div class="compare-icon">{{ plat.icone }}</div>
+            <div class="compare-name">{{ plat.nome }}</div>
+            <div class="compare-badge" style="background: {{ plat.cor }}">{{ plat.classificacao }}</div>
+            <div class="compare-bar">
+                <div class="spectrum-bar spectrum-bar-xs">
+                    <div class="spectrum-fill-left" style="width: {{ plat.esquerda_pct }}%"></div>
+                    <div class="spectrum-fill-right" style="width: {{ plat.direita_pct }}%"></div>
+                </div>
+            </div>
+            <div class="compare-pcts">
+                <span class="label-esq-sm">{{ plat.esquerda_pct }}%</span>
+                <span class="label-dir-sm">{{ plat.direita_pct }}%</span>
+            </div>
+            <div class="compare-conf confianca-{{ plat.confianca|lower }}">{{ plat.confianca }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- PALAVRAS-CHAVE GERAIS -->
+{% if r.top_palavras_esq or r.top_palavras_dir %}
+<section class="keywords-section">
+    <h2>Palavras-chave — Todas as Plataformas</h2>
+    <div class="keywords-grid">
+        {% if r.top_palavras_esq %}
+        <div class="keyword-col keyword-esq">
+            <h3>🔴 Esquerda ({{ r.pontos_esq }} ocorrências)</h3>
+            <div class="keyword-list">
+                {% for palavra, freq in r.top_palavras_esq %}
+                <div class="keyword-item">
+                    <span class="keyword-word">{{ palavra }}</span>
+                    <span class="keyword-freq">{{ freq }}×</span>
+                    <div class="keyword-bar">
+                        <div class="keyword-bar-fill esq" style="width: {{ (freq / r.pontos_esq * 100)|int }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if r.top_palavras_dir %}
+        <div class="keyword-col keyword-dir">
+            <h3>🔵 Direita ({{ r.pontos_dir }} ocorrências)</h3>
+            <div class="keyword-list">
+                {% for palavra, freq in r.top_palavras_dir %}
+                <div class="keyword-item">
+                    <span class="keyword-word">{{ palavra }}</span>
+                    <span class="keyword-freq">{{ freq }}×</span>
+                    <div class="keyword-bar">
+                        <div class="keyword-bar-fill dir" style="width: {{ (freq / r.pontos_dir * 100)|int }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- FIGURAS POLÍTICAS SEGUIDAS (GERAL) -->
+{% if r.seguindo_politicos %}
+<section class="following-section">
+    <h2>👥 Figuras Políticas que Segue — Todas as Plataformas</h2>
+    <div class="following-grid">
+        {% for fig in r.seguindo_politicos %}
+        <div class="following-card {% if fig.score < 0 %}fig-esq{% elif fig.score > 0 %}fig-dir{% else %}fig-centro{% endif %}">
+            <div class="fig-indicator"></div>
+            <div class="fig-info">
+                <span class="fig-nome">{{ fig.nome }}</span>
+                <span class="fig-user">@{{ fig.username }}</span>
+            </div>
+            <div class="fig-lado">
+                {% if fig.score <= -2 %}🔴 ESQ
+                {% elif fig.score == -1 %}🟠 C-E
+                {% elif fig.score == 0 %}🟡 CEN
+                {% elif fig.score == 1 %}🔵 C-D
+                {% else %}🔵 DIR{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- API TWITTER AVISO -->
+{% if not r.tem_api_twitter %}
+<section class="api-warning">
+    <h3>🔑 Melhore sua análise com a API do Twitter</h3>
+    <p>Sem a API, não é possível verificar <strong>quem você segue</strong>. Configure para resultados muito melhores:</p>
+    <ol>
+        <li>Acesse <a href="https://developer.twitter.com/" target="_blank">developer.twitter.com</a></li>
+        <li>Crie um projeto (plano <strong>Free</strong> — sem cartão de crédito)</li>
+        <li>Copie o <strong>Bearer Token</strong></li>
+        <li>Configure: <code>export TWITTER_BEARER_TOKEN="seu_token"</code></li>
+    </ol>
+</section>
+{% endif %}
+
+<!-- FONTES GERAIS -->
+{% if r.fontes %}
+<section class="sources-section">
+    <h2>Fontes de Dados — Total</h2>
+    <div class="sources-grid">
+        {% for fonte, qtd in r.fontes.items() %}
+        <div class="source-card">
+            <div class="source-icon">
+                {% if 'X —' in fonte or 'Twitter' in fonte %}🐦
+                {% elif 'Instagram' in fonte %}📸
+                {% elif 'Facebook' in fonte %}👤
+                {% elif 'News' in fonte %}📰
+                {% elif 'Wiki' in fonte %}📖
+                {% elif 'Busca' in fonte %}🔍
+                {% else %}🌐{% endif %}
+            </div>
+            <div class="source-name">{{ fonte }}</div>
+            <div class="source-count">{{ qtd }} itens</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- LOG COMPLETO -->
+{% if r.logs %}
+<details class="logs-section">
+    <summary>📋 Log de coleta completo ({{ r.logs|length }} operações)</summary>
+    <div class="logs-list">
+        {% for log in r.logs %}
+        <div class="log-item log-{{ log.status }}">
+            <span class="log-fonte">{{ log.fonte }}</span>
+            <span class="log-status">
+                {% if log.status == 'ok' %}✅ {{ log.qtd }} itens
+                {% elif log.status == 'erro' %}❌ {{ log.msg }}
+                {% elif log.status == 'aviso' %}⚠️ {{ log.msg }}
+                {% elif log.status == 'buscando' %}🔄 Buscando...
+                {% endif %}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+</details>
+{% endif %}
+
+<div class="result-actions">
+    <a href="/" class="btn-secondary">🔍 Nova Análise</a>
+</div>
+
+<script>
+function switchTab(tabId, btn) {
+    // Desativar todas as abas
+    document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+    // Ativar a aba clicada
+    btn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+</script>
+{% endblock %}

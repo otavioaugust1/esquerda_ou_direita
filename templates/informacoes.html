@@ -1,0 +1,549 @@
+{% extends "base.html" %}
+{% block title %}Informações — Análise Política{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>📚 Documentação Completa</h1>
+    <p class="hero-desc">
+        Tudo sobre o funcionamento do analisador, conceitos políticos,
+        metodologia de calibração, aspectos legais e preocupações éticas.
+    </p>
+</section>
+
+<nav class="doc-nav">
+    <a href="#espectro">Espectro Político</a>
+    <a href="#app">Sobre o App</a>
+    <a href="#calibracao">Calibração</a>
+    <a href="#palavras">Palavras-chave</a>
+    <a href="#figuras">Figuras Políticas</a>
+    <a href="#imprensa">Imprensa (Score 0)</a>
+    <a href="#lgpd">LGPD e Dados</a>
+    <a href="#polarizacao">Polarização</a>
+    <a href="#limitacoes">Limitações</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     1. ESPECTRO POLÍTICO
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="espectro">
+    <h2>⚖️ O que é Esquerda e Direita?</h2>
+
+    <div class="doc-card">
+        <p>A divisão <strong>esquerda–direita</strong> tem origem na Revolução Francesa (1789), quando os deputados
+        que apoiavam o rei se sentavam à <em>direita</em> do presidente da Assembleia, e os que defendiam
+        reformas populares se sentavam à <em>esquerda</em>.</p>
+
+        <p>Ao longo dos séculos, essa divisão evoluiu e ganhou significados mais amplos:</p>
+    </div>
+
+    <div class="spectrum-compare">
+        <div class="spec-col spec-esq">
+            <h3>🔴 Esquerda</h3>
+            <ul>
+                <li><strong>Estado ativo</strong> — defende maior participação do Estado na economia e políticas sociais</li>
+                <li><strong>Igualdade social</strong> — redistribuição de renda, cotas, políticas afirmativas</li>
+                <li><strong>Direitos sociais</strong> — SUS, educação pública, programas de transferência de renda</li>
+                <li><strong>Progressismo</strong> — defesa de direitos LGBT+, feminismo, laicidade do Estado</li>
+                <li><strong>Meio ambiente</strong> — preservação ambiental, demarcação de terras indígenas</li>
+                <li><strong>Trabalhismo</strong> — sindicatos, direitos trabalhistas, salário mínimo</li>
+            </ul>
+            <div class="spec-partidos">
+                <span class="spec-tag">PT</span>
+                <span class="spec-tag">PSOL</span>
+                <span class="spec-tag">PCdoB</span>
+                <span class="spec-tag">PDT</span>
+                <span class="spec-tag">Rede</span>
+            </div>
+        </div>
+
+        <div class="spec-col spec-centro">
+            <h3>🟡 Centro</h3>
+            <ul>
+                <li><strong>Pragmatismo</strong> — posições moderadas, negociação entre lados</li>
+                <li><strong>Equilíbrio</strong> — Estado presente, mas com espaço para a iniciativa privada</li>
+                <li><strong>Reformismo gradual</strong> — mudanças incrementais, sem rupturas</li>
+                <li><strong>Institucionalismo</strong> — defesa das instituições democráticas</li>
+            </ul>
+            <div class="spec-partidos">
+                <span class="spec-tag">MDB</span>
+                <span class="spec-tag">PSD</span>
+                <span class="spec-tag">PSDB</span>
+            </div>
+        </div>
+
+        <div class="spec-col spec-dir">
+            <h3>🔵 Direita</h3>
+            <ul>
+                <li><strong>Livre mercado</strong> — menos intervenção estatal, privatizações, empreendedorismo</li>
+                <li><strong>Meritocracia</strong> — igualdade de oportunidades, não de resultados</li>
+                <li><strong>Conservadorismo</strong> — valores tradicionais, família, religião</li>
+                <li><strong>Segurança</strong> — endurecimento penal, armamento, ordem pública</li>
+                <li><strong>Patriotismo</strong> — nacionalismo, soberania, fortalecimento militar</li>
+                <li><strong>Redução de impostos</strong> — estado mínimo, desburocratização</li>
+            </ul>
+            <div class="spec-partidos">
+                <span class="spec-tag">PL</span>
+                <span class="spec-tag">NOVO</span>
+                <span class="spec-tag">PP</span>
+                <span class="spec-tag">Republicanos</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-card doc-note">
+        <h4>⚠️ Simplificação necessária</h4>
+        <p>O espectro esquerda–direita é uma <strong>simplificação</strong>. Uma pessoa pode ser economicamente liberal
+        (direita) e socialmente progressista (esquerda), ou vice-versa. Existem otros eixos como
+        autoritarismo vs. libertarismo, globalismo vs. nacionalismo, etc. Este app utiliza o eixo
+        unidimensional como ferramenta de estudo.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     2. SOBRE O APP
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="app">
+    <h2>🔬 Sobre este Aplicativo</h2>
+
+    <div class="doc-card">
+        <p>O <strong>Esquerda ou Direita?</strong> é um projeto de <strong>estudo acadêmico</strong> que analisa
+        a tendência política de perfis públicos a partir de dados disponíveis publicamente na internet.</p>
+
+        <h4>Como funciona</h4>
+        <ol>
+            <li><strong>Coleta</strong> — o sistema busca dados públicos do perfil em 3 plataformas
+            (Twitter/X, Instagram, Facebook) + fontes complementares (Google News, Wikipédia, DuckDuckGo)</li>
+            <li><strong>Processamento</strong> — o texto coletado é normalizado (sem acentos, minúsculas) e comparado
+            com listas de palavras-chave e nomes de figuras políticas</li>
+            <li><strong>Pontuação</strong> — cada ocorrência gera pontos: palavras-chave = 1pt, nomes = 2pt,
+            figuras políticas seguidas = 3× o score da figura</li>
+            <li><strong>Classificação</strong> — a proporção entre pontos de esquerda e direita determina a
+            classificação final e o percentual de confiança</li>
+        </ol>
+
+        <h4>Análise por plataforma</h4>
+        <p>Uma pessoa pode ter <strong>comportamento político diferente</strong> em cada rede social.
+        Por isso, cada plataforma é analisada separadamente. O resultado final combina todas as fontes.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     3. CALIBRAÇÃO DO MODELO
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="calibracao">
+    <h2>🎯 Calibração do Modelo</h2>
+
+    <div class="doc-card">
+        <p>O modelo foi calibrado manualmente, sem machine learning. A calibração segue estas etapas:</p>
+
+        <div class="calib-grid">
+            <div class="calib-step">
+                <span class="calib-num">1</span>
+                <div>
+                    <h4>Seleção de figuras de referência</h4>
+                    <p>~120 perfis de políticos, jornalistas, influenciadores e veículos de mídia foram
+                    classificados manualmente em uma escala de -2 (esquerda forte) a +2 (direita forte).</p>
+                </div>
+            </div>
+            <div class="calib-step">
+                <span class="calib-num">2</span>
+                <div>
+                    <h4>Curadoria de palavras-chave</h4>
+                    <p>~45 termos associados à esquerda e ~45 termos associados à direita foram selecionados
+                    a partir de discursos, hashtags e publicações reais de figuras políticas brasileiras.</p>
+                </div>
+            </div>
+            <div class="calib-step">
+                <span class="calib-num">3</span>
+                <div>
+                    <h4>Pesos diferenciados</h4>
+                    <p>Nem toda evidência tem o mesmo peso:
+                    <strong>Seguir uma figura</strong> é mais revelador que uma menção textual.
+                    Palavras-chave = 1pt, Nomes = 2pt, Figuras seguidas = 3× score.</p>
+                </div>
+            </div>
+            <div class="calib-step">
+                <span class="calib-num">4</span>
+                <div>
+                    <h4>Validação empírica</h4>
+                    <p>O modelo foi testado com perfis públicos conhecidos:
+                    <strong>Lula = 87% Esquerda</strong>, <strong>Bolsonaro = 78% Direita</strong>.
+                    Esses resultados validam a coerência do modelo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-card">
+        <h4>Escala de classificação</h4>
+        <div class="scale-bar">
+            <div class="scale-item scale-esq-forte">
+                <span class="scale-score">-2</span>
+                <span class="scale-label">Esquerda Forte</span>
+            </div>
+            <div class="scale-item scale-esq">
+                <span class="scale-score">-1</span>
+                <span class="scale-label">Centro-Esquerda</span>
+            </div>
+            <div class="scale-item scale-centro">
+                <span class="scale-score">0</span>
+                <span class="scale-label">Centro</span>
+            </div>
+            <div class="scale-item scale-dir">
+                <span class="scale-score">+1</span>
+                <span class="scale-label">Centro-Direita</span>
+            </div>
+            <div class="scale-item scale-dir-forte">
+                <span class="scale-score">+2</span>
+                <span class="scale-label">Direita Forte</span>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px;">Níveis de confiança</h4>
+        <div class="conf-grid">
+            <div class="conf-item"><span class="conf-dot conf-alta"></span> <strong>ALTA</strong> — 15+ evidências</div>
+            <div class="conf-item"><span class="conf-dot conf-media"></span> <strong>MÉDIA</strong> — 8–14 evidências</div>
+            <div class="conf-item"><span class="conf-dot conf-baixa"></span> <strong>BAIXA</strong> — 3–7 evidências</div>
+            <div class="conf-item"><span class="conf-dot conf-mb"></span> <strong>MUITO BAIXA</strong> — 0–2 evidências</div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     4. PALAVRAS-CHAVE
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="palavras">
+    <h2>🔤 Palavras-chave Utilizadas</h2>
+
+    <div class="doc-card">
+        <p>Cada ocorrência de uma palavra-chave no texto coletado vale <strong>1 ponto</strong> para o lado correspondente.
+        As palavras foram selecionadas por sua associação frequente com discursos de cada espectro político no Brasil.</p>
+    </div>
+
+    <div class="keywords-grid">
+        <div class="keyword-col keyword-esq">
+            <h3>🔴 Esquerda (~45 termos)</h3>
+            <div class="keyword-cloud">
+                <span>democracia</span><span>direitos</span><span>humanos</span><span>justiça social</span>
+                <span>igualdade</span><span>trabalhador</span><span>SUS</span><span>saúde pública</span>
+                <span>educação</span><span>feminismo</span><span>feminista</span><span>LGBT</span>
+                <span>LGBTQIA</span><span>diversidade</span><span>inclusão</span><span>amazônia</span>
+                <span>indígena</span><span>quilombola</span><span>reforma agrária</span>
+                <span>PT</span><span>PSOL</span><span>PCdoB</span><span>socialismo</span>
+                <span>socialista</span><span>progressista</span><span>coletivo</span><span>popular</span>
+                <span>povo</span><span>antifascismo</span><span>resistência</span>
+                <span>redistribuição</span><span>minorias</span><span>oprimidos</span>
+                <span>regulação</span><span>soberania</span><span>intervenção</span>
+            </div>
+        </div>
+
+        <div class="keyword-col keyword-dir">
+            <h3>🔵 Direita (~45 termos)</h3>
+            <div class="keyword-cloud">
+                <span>liberdade econômica</span><span>livre mercado</span><span>capitalismo</span>
+                <span>empreendedor</span><span>privatização</span><span>meritocracia</span>
+                <span>redução de impostos</span><span>família tradicional</span>
+                <span>cristão</span><span>conservador</span><span>conservadorismo</span>
+                <span>direita</span><span>petismo</span><span>patriota</span><span>patriotismo</span>
+                <span>armamento</span><span>armas</span><span>segurança</span><span>ordem</span>
+                <span>militar</span><span>agronegócio</span><span>agro</span>
+                <span>liberal</span><span>liberalismo</span><span>propriedade privada</span>
+                <span>anticomunismo</span><span>anticomunista</span><span>doutrinação</span>
+                <span>ideologia de gênero</span><span>valores</span><span>moral</span>
+                <span>nação</span><span>nacionalismo</span><span>corrupção</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-card doc-note">
+        <h4>📝 Nota sobre palavras ambíguas</h4>
+        <p>Algumas palavras como "democracia", "liberdade" e "soberania" são usadas por ambos os lados.
+        Nesta versão, cada termo está associado a apenas um lado com base em sua <strong>frequência de uso predominante</strong>
+        no discurso político brasileiro. Uma versão futura poderia usar pesos fracionários ou análise de contexto.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     5. FIGURAS POLÍTICAS
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="figuras">
+    <h2>👥 Banco de Figuras Políticas</h2>
+
+    <div class="doc-card">
+        <p>O app contém ~120 perfis classificados manualmente. Quando o sistema identifica que o usuário
+        analisado <strong>segue</strong> uma dessas figuras, o score da figura é multiplicado por <strong>3×</strong>
+        e adicionado à pontuação. Esta é a evidência de maior peso no modelo.</p>
+    </div>
+
+    <div class="fig-table-wrap">
+        <table class="fig-table">
+            <thead>
+                <tr>
+                    <th>Score</th>
+                    <th>Classificação</th>
+                    <th>Exemplos de figuras</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="fig-row-esq-forte">
+                    <td><strong>-2</strong></td>
+                    <td>Esquerda Forte</td>
+                    <td>Lula, Dilma, Boulos, Janones, Gleisi, Freixo, Jean Wyllys, Gregório Duvivier, Jones Manoel, Sabrina Fernandes, Brasil 247, Mídia NINJA, DCM, Opera Mundi</td>
+                </tr>
+                <tr class="fig-row-esq">
+                    <td><strong>-1</strong></td>
+                    <td>Centro-Esquerda</td>
+                    <td>Ciro Gomes, Marina Silva, Flávio Dino, Tabata Amaral, Reinaldo Azevedo, Carta Capital, The Intercept Brasil</td>
+                </tr>
+                <tr class="fig-row-centro">
+                    <td><strong>0</strong></td>
+                    <td>Centro (Imprensa)</td>
+                    <td>Folha de S.Paulo, Estadão, O Globo, G1, UOL, BBC Brasil, CNN Brasil, BandNews, SBT, Record, Jornal Nacional</td>
+                </tr>
+                <tr class="fig-row-dir">
+                    <td><strong>+1</strong></td>
+                    <td>Centro-Direita</td>
+                    <td>Tarcísio, Sérgio Moro, Romeu Zema, Kim Kataguiri, Van Hattem, Alexandre Garcia, Jovem Pan, Gazeta do Povo, O Antagonista</td>
+                </tr>
+                <tr class="fig-row-dir-forte">
+                    <td><strong>+2</strong></td>
+                    <td>Direita Forte</td>
+                    <td>Bolsonaro (família), Nikolas Ferreira, Carla Zambelli, Damares, Pablo Marçal, Rodrigo Constantino, Brasil Paralelo, Revista Oeste, Terça Livre</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     6. IMPRENSA — SCORE 0
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="imprensa">
+    <h2>📺 Por que a Imprensa tem Score 0?</h2>
+
+    <div class="doc-card">
+        <p>Veículos de imprensa tradicionais como Folha, Estadão, Globo, UOL, CNN Brasil e BBC Brasil
+        recebem score <strong>0 (neutro/centro)</strong> no modelo. Esta é uma decisão deliberada de design:</p>
+
+        <div class="reason-list">
+            <div class="reason">
+                <span class="reason-num">1</span>
+                <div>
+                    <h4>Audiência transversal</h4>
+                    <p>Veículos de grande imprensa são seguidos por pessoas de <strong>todos os espectros políticos</strong>.
+                    Um apoiador de Lula e um de Bolsonaro podem ambos seguir a Folha. Portanto, seguir um veículo
+                    de mídia não indica posição política.</p>
+                </div>
+            </div>
+            <div class="reason">
+                <span class="reason-num">2</span>
+                <div>
+                    <h4>Evitar falsos positivos</h4>
+                    <p>Se a Folha tivesse score -1 (centro-esquerda), qualquer pessoa que a seguisse teria sua
+                    análise distorcida para a esquerda — mesmo que seja conservadora. O score 0 <strong>não polui</strong>
+                    a análise.</p>
+                </div>
+            </div>
+            <div class="reason">
+                <span class="reason-num">3</span>
+                <div>
+                    <h4>Neutralidade metodológica</h4>
+                    <p>Classificar veículos de imprensa como esquerda ou direita é um debate complexo e subjetivo.
+                    O modelo opta por <strong>não se posicionar</strong> sobre a orientação editorial da mídia tradicional,
+                    focando apenas em figuras e veículos <strong>explicitamente engajados</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <h4>Veículos com score 0:</h4>
+        <div class="media-tags">
+            <span class="media-tag">Folha de S.Paulo</span>
+            <span class="media-tag">Estadão</span>
+            <span class="media-tag">O Globo</span>
+            <span class="media-tag">G1</span>
+            <span class="media-tag">UOL</span>
+            <span class="media-tag">BBC Brasil</span>
+            <span class="media-tag">CNN Brasil</span>
+            <span class="media-tag">BandNews</span>
+            <span class="media-tag">SBT</span>
+            <span class="media-tag">Record</span>
+            <span class="media-tag">Jornal Nacional</span>
+        </div>
+
+        <p style="margin-top: 16px;"><strong>Já veículos com viés editorial explícito</strong> — como Brasil 247 (-2), Revista Oeste (+2),
+        Carta Capital (-1) ou Jovem Pan (+1) — recebem scores diferentes de zero, pois são reconhecidamente
+        posicionados no espectro político.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     7. LGPD E DADOS PÚBLICOS
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="lgpd">
+    <h2>🔒 LGPD, Marco Civil e Dados Públicos</h2>
+
+    <div class="doc-card">
+        <h4>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</h4>
+        <p>A LGPD regula o tratamento de dados pessoais no Brasil. Pontos relevantes para este projeto:</p>
+        <ul>
+            <li><strong>Art. 7º, §4º</strong> — dados tornados <strong>manifestamente públicos</strong> pelo titular
+            podem ser tratados sem consentimento, desde que respeitados os princípios da lei</li>
+            <li><strong>Art. 7º, IV</strong> — o tratamento é permitido para <strong>estudos por órgão de pesquisa</strong>,
+            garantida a anonimização quando possível</li>
+            <li>Publicações em redes sociais com perfil <strong>público</strong> são consideradas dados
+            manifestamente públicos pelo titular</li>
+        </ul>
+
+        <h4>Marco Civil da Internet (Lei 12.965/2014)</h4>
+        <ul>
+            <li><strong>Art. 7º, I</strong> — garante a <strong>inviolabilidade e sigilo</strong> das comunicações
+            privadas. Este app não acessa mensagens privadas</li>
+            <li><strong>Art. 7º, III</strong> — garante a <strong>inviolabilidade e sigilo</strong> dos dados pessoais
+            armazenados. Este app não armazena dados</li>
+        </ul>
+
+        <h4>Como este app respeita a legislação</h4>
+        <div class="legal-grid">
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span>Apenas dados <strong>públicos</strong> são coletados</span>
+            </div>
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span><strong>Nenhum dado é armazenado</strong> — processamento em memória</span>
+            </div>
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span>Não acessa mensagens privadas, DMs ou dados restritos</span>
+            </div>
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span>Não cria perfil de comportamento persistente</span>
+            </div>
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span>Finalidade de <strong>estudo acadêmico</strong></span>
+            </div>
+            <div class="legal-item legal-ok">
+                <span class="legal-icon">✅</span>
+                <span>Não monetiza nem compartilha dados com terceiros</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-card doc-note">
+        <h4>⚠️ Aviso legal</h4>
+        <p>Este projeto é uma ferramenta de <strong>estudo</strong>. O uso da classificação gerada para fins de
+        discriminação, perseguição, assédio ou qualquer ação que viole a dignidade de uma pessoa é
+        <strong>ilegal</strong> — tanto pela LGPD quanto pelo Código Penal (Art. 140 — Injúria, Art. 147 — Ameaça).
+        O autor não se responsabiliza pelo uso indevido da ferramenta.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     8. POLARIZAÇÃO POLÍTICA
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="polarizacao">
+    <h2>🌐 Polarização Política: Importância e Preocupações</h2>
+
+    <div class="doc-card">
+        <h4>O fenômeno das bolhas</h4>
+        <p>As redes sociais criaram <strong>câmaras de eco</strong> (echo chambers) onde as pessoas são expostas
+        predominantemente a opiniões que confirmam suas próprias crenças. Os algoritmos de recomendação
+        amplificam esse efeito, criando <strong>bolhas ideológicas</strong> cada vez mais fechadas.</p>
+
+        <h4>Por que estudar polarização?</h4>
+        <ul>
+            <li><strong>Consciência</strong> — entender em que bolha você está é o primeiro passo para buscar informação diversificada</li>
+            <li><strong>Diálogo</strong> — reconhecer a existência de diferentes perspectivas políticas facilita o diálogo democrático</li>
+            <li><strong>Pensamento crítico</strong> — questionar mensagens políticas e verificar fontes combate a desinformação</li>
+            <li><strong>Saúde democrática</strong> — democracias saudáveis dependem de cidadãos informados de múltiplas perspectivas</li>
+        </ul>
+
+        <h4>Preocupações éticas</h4>
+        <div class="concern-grid">
+            <div class="concern">
+                <span class="concern-icon">🏷️</span>
+                <h5>Rotulação</h5>
+                <p>Classificar pessoas como "esquerda" ou "direita" simplifica a complexidade do pensamento
+                individual. Nenhuma pessoa é definida por um rótulo.</p>
+            </div>
+            <div class="concern">
+                <span class="concern-icon">🎯</span>
+                <h5>Uso indevido</h5>
+                <p>Ferramentas de classificação política podem ser usadas para perseguição, discriminação
+                ou manipulação. Este não é o propósito deste app.</p>
+            </div>
+            <div class="concern">
+                <span class="concern-icon">🤖</span>
+                <h5>Automação</h5>
+                <p>Classificações automatizadas sempre terão erros. Ironia, sarcasmo, citações e mudanças
+                de opinião não são detectados por palavra-chave.</p>
+            </div>
+            <div class="concern">
+                <span class="concern-icon">📊</span>
+                <h5>Viés do modelo</h5>
+                <p>A seleção de palavras-chave e figuras políticas reflete as escolhas do desenvolvedor.
+                Outro pesquisador poderia escolher termos e pesos diferentes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-card">
+        <h4>💡 Propósito deste projeto</h4>
+        <p>Este app <strong>não</strong> foi criado para rotular ou atacar pessoas. Foi criado como um
+        <strong>exercício de análise de dados textuais</strong> e como reflexão sobre como nossas escolhas
+        online — quem seguimos, o que publicamos, o que curtimos — constroem uma <strong>identidade digital</strong>
+        que pode ser interpretada politicamente.</p>
+        <p>O objetivo é <strong>educacional</strong>: provocar reflexão sobre bolhas informacionais e a importância
+        de buscar <strong>diversidade de fontes</strong>.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     9. LIMITAÇÕES
+     ═══════════════════════════════════════════ -->
+<section class="doc-section" id="limitacoes">
+    <h2>🚧 Limitações Conhecidas</h2>
+
+    <div class="doc-card">
+        <div class="limit-grid">
+            <div class="limit-item">
+                <span class="limit-icon">🎭</span>
+                <h4>Sem detecção de ironia</h4>
+                <p>Se alguém cita ironicamente "viva o capitalismo!", o modelo conta como ponto de direita.</p>
+            </div>
+            <div class="limit-item">
+                <span class="limit-icon">📱</span>
+                <h4>APIs limitadas</h4>
+                <p>Instagram e Facebook não têm API pública. Os dados vêm de busca web, que é incompleta.</p>
+            </div>
+            <div class="limit-item">
+                <span class="limit-icon">🔑</span>
+                <h4>Twitter API opcional</h4>
+                <p>Sem a chave TWITTER_BEARER_TOKEN, a análise do Twitter usa apenas busca web.</p>
+            </div>
+            <div class="limit-item">
+                <span class="limit-icon">👤</span>
+                <h4>Perfis privados</h4>
+                <p>Perfis privados ou protegidos não são acessíveis. A análise ficará incompleta.</p>
+            </div>
+            <div class="limit-item">
+                <span class="limit-icon">🌍</span>
+                <h4>Contexto brasileiro</h4>
+                <p>Palavras-chave e figuras são do cenário político brasileiro. Não funciona para outros países.</p>
+            </div>
+            <div class="limit-item">
+                <span class="limit-icon">⏱️</span>
+                <h4>Snapshot temporal</h4>
+                <p>A análise reflete o momento da consulta. Pessoas mudam de opinião ao longo do tempo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="doc-footer">
+    <a href="/" class="btn-secondary">← Voltar para Análise</a>
+</div>
+
+{% endblock %}
