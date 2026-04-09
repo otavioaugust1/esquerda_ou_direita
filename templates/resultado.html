@@ -61,12 +61,16 @@
     <!-- ABAS -->
     <div class="platform-tabs">
         {% for key, plat in r.plataformas.items() %}
-        <button class="platform-tab {% if loop.first %}active{% endif %}"
+        <button class="platform-tab {% if loop.first %}active{% endif %} {% if plat.get('pulado') %}tab-skipped{% endif %}"
                 data-tab="plat-{{ key }}"
                 onclick="switchTab('plat-{{ key }}', this)">
             <span class="tab-icon">{{ plat.icone }}</span>
             <span class="tab-name">{{ plat.nome }}</span>
+            {% if plat.get('pulado') %}
+            <span class="skipped-badge">NÃO PESQUISADO</span>
+            {% else %}
             <span class="tab-badge" style="background: {{ plat.cor }}">{{ plat.classificacao }}</span>
+            {% endif %}
         </button>
         {% endfor %}
     </div>
@@ -74,6 +78,30 @@
     <!-- CONTEÚDO DE CADA PLATAFORMA -->
     {% for key, plat in r.plataformas.items() %}
     <div class="platform-content {% if loop.first %}active{% endif %}" id="plat-{{ key }}">
+
+        {% if plat.get('pulado') %}
+        <!-- Plataforma não selecionada -->
+        <div class="plat-header" style="border-left: 4px solid #888">
+            <div class="plat-title">
+                <span class="plat-icon">{{ plat.icone }}</span>
+                <div>
+                    <h3>{{ plat.nome }}</h3>
+                    <p class="plat-desc-coleta">Esta rede não foi selecionada para análise</p>
+                </div>
+            </div>
+            <div class="skipped-badge">NÃO PESQUISADO</div>
+        </div>
+        {% else %}
+
+        <!-- Aviso de rede privada -->
+        {% if plat.get('aviso_privado') %}
+        <div class="private-warning">
+            <span class="warn-icon">🔒</span>
+            <div>
+                <strong>Rede privada</strong> — {{ plat.aviso_privado }}
+            </div>
+        </div>
+        {% endif %}
 
         <!-- Cabeçalho da plataforma -->
         <div class="plat-header" style="border-left: 4px solid {{ plat.cor }}">
@@ -227,6 +255,8 @@
             </div>
         </details>
         {% endif %}
+
+        {% endif %}{# end if pulado #}
 
     </div>
     {% endfor %}

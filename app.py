@@ -35,6 +35,7 @@ def analisar():
     """Processa a análise política."""
     handle = request.form.get('handle', '').strip()
     nome = request.form.get('nome', '').strip()
+    redes = request.form.getlist('redes')
 
     if not handle:
         return render_template('index.html', erro='Informe o @ do perfil.')
@@ -44,7 +45,10 @@ def analisar():
     if not handle:
         return render_template('index.html', erro='Handle inválido.')
 
-    resultado, erro = executar_analise(handle, nome if nome else None)
+    if not redes:
+        return render_template('index.html', erro='Selecione ao menos uma rede social.')
+
+    resultado, erro = executar_analise(handle, nome if nome else None, redes_selecionadas=redes)
 
     if erro:
         return render_template('index.html', erro=erro)
@@ -58,11 +62,12 @@ def api_analisar():
     data = request.get_json(silent=True) or {}
     handle = data.get('handle', '').strip()
     nome = data.get('nome', '').strip()
+    redes = data.get('redes', ['twitter', 'instagram', 'facebook'])
 
     if not handle:
         return jsonify({'erro': 'Handle obrigatório'}), 400
 
-    resultado, erro = executar_analise(handle, nome if nome else None)
+    resultado, erro = executar_analise(handle, nome if nome else None, redes_selecionadas=redes)
 
     if erro:
         return jsonify({'erro': erro}), 500

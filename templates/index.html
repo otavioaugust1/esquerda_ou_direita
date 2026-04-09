@@ -46,6 +46,34 @@
             <small class="input-hint">Melhora a busca em notícias e Wikipédia</small>
         </div>
 
+        <div class="input-group">
+            <label>Redes Sociais para Pesquisar</label>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="redes" value="twitter" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-icon">🐦</span> X / Twitter
+                    <span class="checkbox-tag tag-public">Pública</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="redes" value="instagram" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-icon">📸</span> Instagram
+                    <span class="checkbox-tag tag-public">Pública</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="redes" value="facebook" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-icon">👤</span> Facebook
+                    <span class="checkbox-tag tag-public">Pública</span>
+                </label>
+            </div>
+            <small class="input-hint">
+                ⚠️ Instagram e Facebook são redes privadas: podem retornar dados de outra pessoa com o mesmo @.
+                Para resultados confiáveis, prefira <strong>X / Twitter</strong>.
+            </small>
+        </div>
+
         <button type="submit" class="btn-primary" id="btnSubmit">
             <span class="btn-text">🔍 Analisar Perfil</span>
             <span class="btn-loading" style="display:none;">

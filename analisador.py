@@ -42,24 +42,215 @@ TIMEOUT = 12
 # =========================
 
 FIGURAS_POLITICAS = {
-    # ── ESQUERDA FORTE (-2) ──
-    'lulaoficial': ('Lula', -2),
-    'labordes': ('Lula', -2),
-    'dilmabr': ('Dilma Rousseff', -2),
-    'andrejanonesadv': ('André Janones', -2),
-    'guilhermeboulos': ('Guilherme Boulos', -2),
-    'guilherme.boulos': ('Guilherme Boulos', -2),
-    'gleisihoffmannoficial': ('Gleisi Hoffmann', -2),
-    'gleisihoffmann': ('Gleisi Hoffmann', -2),
-    'fernandohaddad': ('Fernando Haddad', -2),
-    'jandirafeghali': ('Jandira Feghali', -2),
-    'marcelofreixo': ('Marcelo Freixo', -2),
-    'samiabomfim': ('Sâmia Bomfim', -2),
+    # ════════════════════════════════════════
+    # PARTIDOS POLÍTICOS
+    # ════════════════════════════════════════
+
+    # ── PARTIDOS ESQUERDA (-2) ──
     'pt_brasil': ('PT', -2),
     'ptbrasil': ('PT', -2),
     'pcdoboficial': ('PCdoB', -2),
     'psol50': ('PSOL', -2),
     'psoloficial': ('PSOL', -2),
+
+    # ── PARTIDOS CENTRO-ESQUERDA (-1) ──
+    'pdt_oficial': ('PDT', -1),
+    'pdtoficial': ('PDT', -1),
+    'psbnacional': ('PSB', -1),
+    'psb_nacional': ('PSB', -1),
+    'redesustentabilidade': ('Rede Sustentabilidade', -1),
+    'rede_sustentabilidade': ('Rede Sustentabilidade', -1),
+
+    # ── PARTIDOS CENTRO (0) ──
+    'mdbnacional': ('MDB', 0),
+    'mdb_oficial': ('MDB', 0),
+    'psd_oficial': ('PSD', 0),
+    'psdoficial': ('PSD', 0),
+    'cidadaniaoficial': ('Cidadania', 0),
+    'movimentoavante': ('Avante', 0),
+    'solidariedade_br': ('Solidariedade', 0),
+
+    # ── PARTIDOS CENTRO-DIREITA (1) ──
+    'psdb': ('PSDB', 1),
+    'psdb_oficial': ('PSDB', 1),
+    'uniaobrasil': ('União Brasil', 1),
+    'uniao_brasil': ('União Brasil', 1),
+    'podemos_br': ('Podemos', 1),
+    'podemosoficial': ('Podemos', 1),
+    'republicanos10': ('Republicanos', 1),
+    'republicanosbr': ('Republicanos', 1),
+    'pp_progressistas': ('Progressistas', 1),
+    'partidonovo30': ('Partido NOVO', 1),
+
+    # ── PARTIDOS DIREITA (2) ──
+    'pl_brasil': ('PL', 2),
+    'ploficial': ('PL', 2),
+
+    # ════════════════════════════════════════
+    # GOVERNO FEDERAL LULA — MINISTÉRIOS E ÓRGÃOS (-2)
+    # ════════════════════════════════════════
+    'minsaude': ('Ministério da Saúde', -2),
+    'ministeriodasaude': ('Ministério da Saúde', -2),
+    'minsaude_': ('Ministério da Saúde', -2),
+    'govbr': ('Governo Federal', -2),
+    'secomgovbr': ('Secom Gov BR', -2),
+    'planalto': ('Palácio do Planalto', -2),
+    'mineducacao': ('MEC', -2),
+    'mec_brasil': ('MEC', -2),
+    'mds_brasil': ('Min. Desenvolvimento Social', -2),
+    'mds_gov': ('Min. Desenvolvimento Social', -2),
+    'agenciabrasil': ('Agência Brasil', -2),
+    'portalsus': ('Portal SUS', -2),
+    'sus_oficial': ('SUS Oficial', -2),
+    'conass_br': ('CONASS', -2),
+    'fiocruz': ('Fiocruz', -2),
+    'fiocruzoficial': ('Fiocruz', -2),
+    'nilsiatrindade': ('Nilsia Trindade', -2),
+    'lulasaude': ('Lula Saúde', -2),
+    'cremesp': ('CREMESP', -2),
+    'cfm_oficial': ('CFM', -2),
+    'alexandresilveira': ('Alexandre Silveira', -2),
+    'jorgemeseias': ('Jorge Messias', -2),
+    'analuisaaguimaraes': ('Ana Luísa Aguimarães', -2),
+    'min_meio_ambiente': ('Min. Meio Ambiente', -2),
+    'mcidades_oficial': ('Min. Cidades', -2),
+    'mturismobrasil': ('Min. Turismo', -2),
+
+    # ════════════════════════════════════════
+    # GOVERNADORES
+    # ════════════════════════════════════════
+
+    # ── GOVERNADORES ESQUERDA (-2) ──
+    'elmanofreitas': ('Elmano de Freitas (Gov. CE/PT)', -2),
+    'jeronimobt': ('Jerônimo Rodrigues (Gov. BA/PT)', -2),
+    'jeronimorodrigues': ('Jerônimo Rodrigues (Gov. BA/PT)', -2),
+    'rafaelfonteles': ('Rafael Fonteles (Gov. PI/PT)', -2),
+    'fatimabezerra': ('Fátima Bezerra (Gov. RN/PT)', -2),
+    'camilosantana': ('Camilo Santana (Min. Educação/PT)', -2),
+
+    # ── GOVERNADORES CENTRO-ESQUERDA (-1) ──
+    'helderbarbalho': ('Helder Barbalho (Gov. PA/MDB)', -1),
+    'helder_barbalho': ('Helder Barbalho (Gov. PA/MDB)', -1),
+    'casagrande_es': ('Renato Casagrande (Gov. ES/PSB)', -1),
+    'renatocasagrande': ('Renato Casagrande (Gov. ES/PSB)', -1),
+    'joaocampos_': ('João Campos (Pref. Recife/PSB)', -1),
+    'clecio_lm': ('Clécio Luís (Gov. AP/PDT)', -1),
+
+    # ── GOVERNADORES CENTRO (0) ──
+    'eduardoleite': ('Eduardo Leite (Gov. RS/PSDB)', 0),
+    'ibaneisrocha': ('Ibaneis Rocha (Gov. DF/MDB)', 0),
+    'raquellyra': ('Raquel Lyra (Gov. PE/PSDB)', 0),
+    'paulodantas_al': ('Paulo Dantas (Gov. AL/MDB)', 0),
+
+    # ── GOVERNADORES CENTRO-DIREITA (1) ──
+    'tarcisiogdf': ('Tarcísio de Freitas (Gov. SP/Rep.)', 1),
+    'romeuzema': ('Romeu Zema (Gov. MG/NOVO)', 1),
+    'ronaldocaiado': ('Ronaldo Caiado (Gov. GO/União)', 1),
+    'ratinhojunior': ('Ratinho Junior (Gov. PR/PSD)', 1),
+    'mauro_mendes': ('Mauro Mendes (Gov. MT/União)', 1),
+    'wanderlei_barbosa': ('Wanderlei Barbosa (Gov. TO/Rep.)', 1),
+    'eduardoriedel': ('Eduardo Riedel (Gov. MS/PSDB)', 1),
+
+    # ── GOVERNADORES DIREITA (2) ──
+    'jorginhomello': ('Jorginho Mello (Gov. SC/PL)', 2),
+    'claudiocastrorj': ('Cláudio Castro (Gov. RJ/PL)', 2),
+
+    # ════════════════════════════════════════
+    # SENADORES
+    # ════════════════════════════════════════
+
+    # ── SENADORES ESQUERDA (-2) ──
+    'paulopaim': ('Paulo Paim (Sen. PT/RS)', -2),
+    'fabiano_contarato': ('Fabiano Contarato (Sen. PT/ES)', -2),
+    'humbertocosta': ('Humberto Costa (Sen. PT/PE)', -2),
+    'jacqueswagner': ('Jaques Wagner (Sen. PT/BA)', -2),
+    'rogeriocarvalhopt': ('Rogério Carvalho (Sen. PT/SE)', -2),
+    'randolfe': ('Randolfe Rodrigues (Sen. PT/AP)', -2),
+    'paulorocha_pt': ('Paulo Rocha (Sen. PT/PA)', -2),
+
+    # ── SENADORES CENTRO-ESQUERDA (-1) ──
+    'renancalheiros': ('Renan Calheiros (Sen. MDB/AL)', -1),
+    'omaraziz': ('Omar Aziz (Sen. PSD/AM)', -1),
+    'elizianegama': ('Eliziane Gama (Sen. PSD/MA)', -1),
+    'weverton': ('Weverton Rocha (Sen. PDT/MA)', -1),
+
+    # ── SENADORES CENTRO (0) ──
+    'rodrigopacheco': ('Rodrigo Pacheco (Pres. Senado/PSD)', 0),
+
+    # ── SENADORES CENTRO-DIREITA (1) ──
+    'sergiomoro': ('Sérgio Moro (Sen. União/PR)', 1),
+    'cironogueira': ('Ciro Nogueira (Sen. PP/PI)', 1),
+    'efraim_filho': ('Efraim Filho (Sen. União/PB)', 1),
+    'marcos_do_val': ('Marcos do Val (Sen. Podemos/ES)', 1),
+    'marcopontes': ('Marcos Pontes (Sen. PL/SP)', 1),
+    'astronautamarcos': ('Marcos Pontes (Sen. PL/SP)', 1),
+
+    # ── SENADORES DIREITA (2) ──
+    'flaviobolsonaro': ('Flávio Bolsonaro (Sen. PL/RJ)', 2),
+    'damaresalves': ('Damares Alves (Sen. PL/DF)', 2),
+    'general_girao': ('General Girão (Sen. PL/RN)', 2),
+    'marcosrogerio': ('Marcos Rogério (Sen. PL/RO)', 2),
+
+    # ════════════════════════════════════════
+    # DEPUTADOS FEDERAIS
+    # ════════════════════════════════════════
+
+    # ── DEPUTADOS ESQUERDA (-2) ──
+    'glauberbraga': ('Glauber Braga (Dep. PSOL/RJ)', -2),
+    'taliria': ('Taliria Petrone (Dep. PSOL/RJ)', -2),
+    'fmelchionna': ('Fernanda Melchionna (Dep. PSOL/RS)', -2),
+    'fernandamelchionna': ('Fernanda Melchionna (Dep. PSOL/RS)', -2),
+    'leopericles': ('Léo Péricles (Dep. PSOL/AM)', -2),
+    'erikakokay': ('Erika Kokay (Dep. PT/DF)', -2),
+    'pimenta13': ('Paulo Pimenta (Dep. PT/RS)', -2),
+    'beneditapt': ('Benedita da Silva (Dep. PT/RJ)', -2),
+    'reginaldolopes': ('Reginaldo Lopes (Dep. PT/MG)', -2),
+    'aliceportugal': ('Alice Portugal (Dep. PCdoB/BA)', -2),
+    'chicoalencar': ('Chico Alencar (Dep. PSOL/RJ)', -2),
+    'ruifalcao': ('Rui Falcão (Dep. PT/SP)', -2),
+    'zecadirceu': ('Zeca Dirceu (Dep. PT/PR)', -2),
+    'samiabomfim': ('Sâmia Bomfim (Dep. PSOL/SP)', -2),
+    'andrejanonesadv': ('André Janones (Dep. Avante/MG)', -2),
+    'guilhermeboulos': ('Guilherme Boulos (Dep. PSOL/SP)', -2),
+    'guilherme.boulos': ('Guilherme Boulos (Dep. PSOL/SP)', -2),
+    'jandirafeghali': ('Jandira Feghali (Dep. PCdoB/RJ)', -2),
+    'marcelofreixo': ('Marcelo Freixo (Dep./PT/RJ)', -2),
+
+    # ── DEPUTADOS CENTRO-ESQUERDA (-1) ──
+    'alessandromolon': ('Alessandro Molon (Dep. PSB/RJ)', -1),
+    'tabataamaralsp': ('Tabata Amaral (Dep. PSB/SP)', -1),
+    'marcelo_calero': ('Marcelo Calero (Dep. Cidadania/RJ)', -1),
+
+    # ── DEPUTADOS CENTRO-DIREITA (1) ──
+    'arthurlira': ('Arthur Lira (Dep. PP/AL)', 1),
+    'kimkataguiri': ('Kim Kataguiri (Dep. MDB/SP)', 1),
+    'marcelvanhattem': ('Marcel van Hattem (Dep. NOVO/RS)', 1),
+    'osmarterra': ('Osmar Terra (Dep. MDB/RS)', 1),
+
+    # ── DEPUTADOS DIREITA (2) ──
+    'nikolasferreira': ('Nikolas Ferreira (Dep. PL/MG)', 2),
+    'carlazambelli': ('Carla Zambelli (Dep. PL/SP)', 2),
+    'eduardobolsonaro': ('Eduardo Bolsonaro (Dep. PL/SP)', 2),
+    'edubolsonaro': ('Eduardo Bolsonaro (Dep. PL/SP)', 2),
+    'carlosbolsonaro': ('Carlos Bolsonaro (Ver. PL/RJ)', 2),
+    'biakicis': ('Bia Kicis (Dep. PL/DF)', 2),
+    'marcofeliciano': ('Marco Feliciano (Dep. PL/SP)', 2),
+    'sostenescavalcante': ('Sóstenes Cavalcante (Dep. PL/RJ)', 2),
+    'coroneltadeu': ('Coronel Tadeu (Dep. PL/SP)', 2),
+    'andrefernandes': ('André Fernandes (Dep. PL/CE)', 2),
+    'christonietto': ('Chris Tonietto (Dep. PL/RJ)', 2),
+    'danielsilveirarj': ('Daniel Silveira (Dep. PL/RJ)', 2),
+    'jairrenan_': ('Jair Renan (Dep. PL/SC)', 2),
+
+    # ════════════════════════════════════════
+    # LIDERANÇAS NACIONAIS — ESQUERDA (-2)
+    # ════════════════════════════════════════
+    'lulaoficial': ('Lula', -2),
+    'labordes': ('Lula', -2),
+    'dilmabr': ('Dilma Rousseff', -2),
+    'gleisihoffmannoficial': ('Gleisi Hoffmann', -2),
+    'gleisihoffmann': ('Gleisi Hoffmann', -2),
+    'fernandohaddad': ('Fernando Haddad', -2),
     'gduvivier': ('Gregório Duvivier', -2),
     'gregorioduvivier': ('Gregório Duvivier', -2),
     'jeanwyllys_real': ('Jean Wyllys', -2),
@@ -75,12 +266,12 @@ FIGURAS_POLITICAS = {
     'conversaafiada': ('Conversa Afiada', -2),
     'revistaforum': ('Revista Fórum', -2),
     'operamundi': ('Opera Mundi', -2),
-    # ── CENTRO-ESQUERDA (-1) ──
+
+    # ── LIDERANÇAS CENTRO-ESQUERDA (-1) ──
     'cirogomes': ('Ciro Gomes', -1),
     'marinasilvabr': ('Marina Silva', -1),
     'marinasilva': ('Marina Silva', -1),
     'flaviodino': ('Flávio Dino', -1),
-    'tabataamaralsp': ('Tabata Amaral', -1),
     'reinaldoazevedo': ('Reinaldo Azevedo', -1),
     'luisnassif': ('Luís Nassif', -1),
     'leonardosakamoto': ('Leonardo Sakamoto', -1),
@@ -88,7 +279,10 @@ FIGURAS_POLITICAS = {
     'cartacapital': ('Carta Capital', -1),
     'theintercept_br': ('The Intercept Brasil', -1),
     'theinterceptbr': ('The Intercept Brasil', -1),
-    # ── CENTRO (0) ──
+
+    # ════════════════════════════════════════
+    # IMPRENSA E MÍDIA — CENTRO (0)
+    # ════════════════════════════════════════
     'folha': ('Folha de S.Paulo', 0),
     'folhadespaulo': ('Folha de S.Paulo', 0),
     'estadao': ('Estadão', 0),
@@ -105,37 +299,27 @@ FIGURAS_POLITICAS = {
     'sbtonline': ('SBT', 0),
     'recordtv': ('Record', 0),
     'jornalnacional': ('Jornal Nacional', 0),
-    # ── CENTRO-DIREITA (1) ──
-    'tarcisiogdf': ('Tarcísio de Freitas', 1),
-    'sergiomoro': ('Sérgio Moro', 1),
-    'romeuzema': ('Romeu Zema', 1),
-    'kimkataguiri': ('Kim Kataguiri', 1),
-    'marcelvanhattem': ('Marcel van Hattem', 1),
-    'partidonovo30': ('Partido NOVO', 1),
+    'correio_braziliense': ('Correio Braziliense', 0),
+    'valoreconomico': ('Valor Econômico', 0),
+    'agenciasenadobr': ('Agência Senado', 0),
+    'agenciacamara': ('Agência Câmara', 0),
+
+    # ── IMPRENSA CENTRO-DIREITA (1) ──
     'oantagonista': ('O Antagonista', 1),
     'gazetadopovo': ('Gazeta do Povo', 1),
     'jovempannews': ('Jovem Pan News', 1),
     'jovempan': ('Jovem Pan', 1),
     'alexandregarcia': ('Alexandre Garcia', 1),
     'leandronarloch': ('Leandro Narloch', 1),
-    'marcopontes': ('Marcos Pontes', 1),
-    'osmarterra': ('Osmar Terra', 1),
-    # ── DIREITA FORTE (2) ──
+
+    # ── LIDERANÇAS / IMPRENSA DIREITA (2) ──
     'jairbolsonaro': ('Jair Bolsonaro', 2),
     'bolsonaro': ('Jair Bolsonaro', 2),
-    'flaviobolsonaro': ('Flávio Bolsonaro', 2),
-    'carlosbolsonaro': ('Carlos Bolsonaro', 2),
-    'eduardobolsonaro': ('Eduardo Bolsonaro', 2),
-    'edubolsonaro': ('Eduardo Bolsonaro', 2),
     'michellebolsonaro': ('Michelle Bolsonaro', 2),
-    'damaresalves': ('Damares Alves', 2),
-    'nikolasferreira': ('Nikolas Ferreira', 2),
-    'carlazambelli': ('Carla Zambelli', 2),
-    'pl_brasil': ('PL', 2),
     'rodrigoconstantino': ('Rodrigo Constantino', 2),
     'allandossantos': ('Allan dos Santos', 2),
     'bernardopkuster': ('Bernardo P. Küster', 2),
-    'gustavogayer': ('Gustavo Gayer', 2),
+    'gustavogayer': ('Gustavo Gayer (Dep. PL/GO)', 2),
     'pablomarcal': ('Pablo Marçal', 2),
     'pablo_marcal': ('Pablo Marçal', 2),
     'revistaoeste': ('Revista Oeste', 2),
@@ -147,140 +331,209 @@ FIGURAS_POLITICAS = {
 }
 
 # Nomes para busca textual em notícias/bio
+# ATENÇÃO: usar apenas termos ESPECÍFICOS para evitar falsos positivos.
+# Termos muito curtos ou comuns devem estar como FRASES (com espaço), não palavras soltas.
 NOMES_ESQUERDA = {
+    # lideranças
     'lula',
     'dilma',
     'haddad',
     'boulos',
     'gleisi',
     'janones',
-    'jandira',
-    'feghali',
-    'freixo',
-    'dino',
+    'jandira feghali',
+    'marcelo freixo',
+    'flavio dino',
     'marina silva',
     'ciro gomes',
-    'samia',
-    'bomfim',
+    'samia bomfim',
     'jean wyllys',
-    'psol',
-    'pcdob',
     'jones manoel',
     'sabrina fernandes',
-    'gregorio',
-    'duvivier',
-    'sakamoto',
-    'nassif',
-    'kfouri',
+    'gregorio duvivier',
+    'leonardo sakamoto',
+    'luis nassif',
+    'juca kfouri',
+    # partidos
+    'psol',
+    'pcdob',
+    'partido dos trabalhadores',
+    # mídia
     'brasil 247',
-    'dcm',
+    'dcm online',
     'carta capital',
-    'intercept',
-    'ninja',
+    'the intercept',
+    'midia ninja',
     'opera mundi',
-    'altman',
+    'revista forum',
+    # governo federal lula
+    'ministerio da saude',
+    'ministerio da educacao',
+    'ministerio do desenvolvimento',
+    'governo federal',
+    'governo lula',
+    'palacio do planalto',
+    'fiocruz',
+    'agencia brasil',
+    'nilsia trindade',
+    # governadores/senadores esquerda
+    'elmano de freitas',
+    'jeronimo rodrigues',
+    'fatima bezerra',
+    'camilo santana',
+    'helder barbalho',
+    'randolfe rodrigues',
+    'humberto costa',
+    'paulo paim',
 }
 
 NOMES_DIREITA = {
-    'bolsonaro',
-    'moro',
-    'zema',
-    'tarcisio',
-    'nikolas',
-    'zambelli',
-    'damares',
-    'eduardo bolsonaro',
-    'carlos bolsonaro',
+    # lideranças
+    'jair bolsonaro',
+    'michelle bolsonaro',
     'flavio bolsonaro',
-    'kim kataguiri',
-    'van hattem',
-    'constantino',
-    'narloch',
+    'carlos bolsonaro',
+    'eduardo bolsonaro',
+    'sergio moro',
+    'romeu zema',
+    'tarcisio de freitas',
+    'nikolas ferreira',
+    'carla zambelli',
+    'damares alves',
     'pablo marcal',
-    'gayer',
-    'allan santos',
-    'kuster',
-    'olavo',
-    'antagonista',
+    'gustavo gayer',
+    'bia kicis',
+    'marco feliciano',
+    'kim kataguiri',
+    'marcel van hattem',
+    'rodrigo constantino',
+    'leandro narloch',
+    'allan dos santos',
+    'bernardo kuster',
+    'olavo de carvalho',
+    'daniel silveira',
+    'marcos rogerio',
+    'sostenes cavalcante',
+    # mídia direita
+    'revista oeste',
+    'o antagonista',
     'gazeta do povo',
-    'oeste',
     'jovem pan',
     'brasil paralelo',
+    'terca livre',
     'senso incomum',
+    'conexao politica',
+    # governadores/senadores direita
+    'ronaldo caiado',
+    'jorginho mello',
+    'claudio castro',
+    'wanderlei barbosa',
+    # movimento
+    'escola sem partido',
 }
 
+# Palavras-chave para análise de texto.
+# REGRA: REMOVER palavras que qualquer pessoa (mesmo do lado oposto) usa.
+# Manter apenas termos suficientemente específicos.
 PALAVRAS_ESQUERDA = {
+    # identidade / movimento
     'igualdade',
-    'trabalhador',
-    'trabalhadores',
-    'sus',
     'feminismo',
     'feminista',
-    'lgbt',
     'lgbtqia',
-    'amazonia',
     'indigena',
     'quilombola',
-    'reforma',
-    'agraria',
-    'pt',
+    'reforma agraria',
+    'socialismo',
+    'socialista',
+    'progressista',
+    'antifascismo',
+    'antifascista',
+    'redistribuicao',
+    'minorias',
+    'oprimidos',
+    'esquerda',
+    'progressismo',
+    'inclusao',
+    'diversidade',
+    # nomes específicos (curtos o suficiente para serem palavras)
     'psol',
     'pcdob',
     'lula',
     'dilma',
     'boulos',
-    'socialismo',
-    'socialista',
-    'progressista',
-    'coletivo',
-    'antifascismo',
-    'antifascista',
-    'resistencia',
-    'redistribuicao',
-    'minorias',
-    'oprimidos',
     'haddad',
     'janones',
     'freixo',
     'duvivier',
     'sakamoto',
+    'fiocruz',
+    # saúde pública / governo (como frases para evitar falsos positivos)
+    'vacinacao',
+    'vacina',
+    'epidemiologia',
+    'sus',
+    'desigualdade',
+    'trabalhismo',
+    'trabalhista',
+    # frases específicas (multi-token, matched por substring)
+    'saude publica',
+    'saude coletiva',
+    'governo federal',
+    'politica publica',
+    'politicas publicas',
+    'assistencia social',
+    'educacao publica',
+    'bolsa familia',
+    'vigilancia sanitaria',
+    'saude mental',
+    'reducao de danos',
+    'combate a fome',
+    'fome zero',
+    'cotas raciais',
+    'acao afirmativa',
+    'movimento social',
+    'movimentos sociais',
+    'reforma agraria',
+    'direitos humanos',
+    'direitos trabalhistas',
+    'estado de bem estar',
+    'renda basica',
 }
 
 PALAVRAS_DIREITA = {
-    'capitalismo',
-    'empreendedor',
-    'empreendedorismo',
-    'privatizacao',
-    'privatizar',
+    # termos específicos de direita
     'meritocracia',
-    'tradicional',
-    'cristaos',
-    'cristao',
-    'conservador',
-    'conservadorismo',
     'bolsonaro',
-    'direita',
+    'bolsonarismo',
+    'bolsonarista',
     'petismo',
-    'patriota',
-    'patriotismo',
-    'armamento',
-    'armas',
-    'militar',
+    'petista',
     'agronegocio',
-    'agro',
-    'liberalismo',
-    'propriedade',
-    'privada',
+    'neoliberalismo',
+    'privatismo',
     'anticomunismo',
     'anticomunista',
-    'comunismo',
+    'antiesquerda',
     'doutrinacao',
-    'nacionalismo',
-    'moro',
+    'globalismo',
+    'globalista',
     'nikolas',
     'zambelli',
     'marcal',
     'gayer',
+    # frases específicas de direita
+    'kit gay',
+    'ideologia de genero',
+    'familia tradicional',
+    'valores conservadores',
+    'escola sem partido',
+    'estado minimo',
+    'livre mercado',
+    'voto impresso',
+    'fraude eleitoral',
+    'intervencao militar',
+    'globo mentira',
 }
 
 
@@ -310,6 +563,72 @@ def normalizar_texto(texto):
     for antigo, novo in acentos.items():
         texto = texto.replace(antigo, novo)
     return texto
+
+
+def filtrar_resultados_username(posts, username):
+    """
+    Filtra resultados para garantir que pertencem ao username EXATO.
+    Descarta resultados que mencionam usernames similares mas diferentes
+    (ex: pesquisou 'otavioaugust' mas encontrou '_otavioaugust', 'otavioaugust98',
+    'otavio_auguston', etc.).
+    """
+    username_lower = username.lower()
+    # Normalizado: sem underscores e pontos, para detectar variações
+    username_norm = username_lower.replace('_', '').replace('.', '')
+    filtrados = []
+
+    for post in posts:
+        texto_lower = post.get('texto', '').lower()
+        url_lower = post.get('url', '').lower()
+        combinado = texto_lower + ' ' + url_lower
+
+        # Extrair menções de @ e usernames de URLs de redes sociais
+        mencoes_at = re.findall(r'@([a-zA-Z0-9_.]+)', combinado)
+        mencoes_url = re.findall(
+            r'(?:twitter\.com|x\.com|instagram\.com|facebook\.com)/([a-zA-Z0-9_.]+)',
+            combinado,
+        )
+
+        todas_mencoes = mencoes_at + mencoes_url
+
+        if todas_mencoes:
+            tem_exato = False
+            tem_confuso = False
+            for mencao in todas_mencoes:
+                mencao = mencao.rstrip('/').lower()
+                if mencao == username_lower:
+                    tem_exato = True
+                    continue
+
+                # Normalizar a menção para comparação
+                mencao_norm = mencao.replace('_', '').replace('.', '')
+
+                # Detectar usernames confusos: variações do target
+                # Caso 1: um contém o outro (ex: otavioaugust98, _otavioaugust)
+                if mencao_norm and username_norm and (
+                    username_norm in mencao_norm or mencao_norm in username_norm
+                ):
+                    tem_confuso = True
+                    continue
+
+                # Caso 2: prefixo longo em comum (≥6 chars)
+                prefixo_comum = 0
+                for a, b in zip(mencao_norm, username_norm):
+                    if a == b:
+                        prefixo_comum += 1
+                    else:
+                        break
+                if prefixo_comum >= 6:
+                    tem_confuso = True
+
+            # Se encontrou username confuso (similar mas diferente)
+            # e NÃO encontrou o exato, descartar este resultado
+            if tem_confuso and not tem_exato:
+                continue
+
+        filtrados.append(post)
+
+    return filtrados
 
 
 def buscar_web(query, max_results=15):
@@ -448,6 +767,13 @@ def buscar_wikipedia(nome):
 # =========================
 
 
+# Separar palavras simples de frases multi-token para análise correta
+_PALAVRAS_ESQ_SIMPLES = frozenset(p for p in PALAVRAS_ESQUERDA if ' ' not in p)
+_FRASES_ESQ = [p for p in PALAVRAS_ESQUERDA if ' ' in p]
+_PALAVRAS_DIR_SIMPLES = frozenset(p for p in PALAVRAS_DIREITA if ' ' not in p)
+_FRASES_DIR = [p for p in PALAVRAS_DIREITA if ' ' in p]
+
+
 def analisar_por_palavras(posts):
     """Analisa posts por palavras-chave e nomes conhecidos."""
     total_esq = 0
@@ -460,13 +786,24 @@ def analisar_por_palavras(posts):
         palavras = re.findall(r'\b\w+\b', texto_norm)
 
         for palavra in palavras:
-            if palavra in PALAVRAS_ESQUERDA:
+            if palavra in _PALAVRAS_ESQ_SIMPLES:
                 total_esq += 1
                 palavras_esq.append(palavra)
-            elif palavra in PALAVRAS_DIREITA:
+            elif palavra in _PALAVRAS_DIR_SIMPLES:
                 total_dir += 1
                 palavras_dir.append(palavra)
 
+        # Frases multi-token (ex: 'saude publica', 'governo federal')
+        for frase in _FRASES_ESQ:
+            if frase in texto_norm:
+                total_esq += 2
+                palavras_esq.append(frase)
+        for frase in _FRASES_DIR:
+            if frase in texto_norm:
+                total_dir += 2
+                palavras_dir.append(frase)
+
+        # Nomes de figuras conhecidas (substring no texto)
         for nome in NOMES_ESQUERDA:
             if nome in texto_norm:
                 total_esq += 2
@@ -480,20 +817,27 @@ def analisar_por_palavras(posts):
 
 
 def analisar_seguidores(seguindo_politicos):
-    """Analisa figuras políticas seguidas (peso forte)."""
+    """Analisa figuras políticas seguidas (peso MUITO forte — 5x)."""
     score_esq = 0
     score_dir = 0
     figuras_esq = []
     figuras_dir = []
 
+    vistos = set()
     for fig in seguindo_politicos:
+        # Deduplicar: mesma figura detectada em múltiplas fontes conta uma vez
+        chave = fig.get('username', fig['nome'])
+        if chave in vistos:
+            continue
+        vistos.add(chave)
+
         score = fig['score']
         nome = fig['nome']
         if score < 0:
-            score_esq += abs(score) * 3
+            score_esq += abs(score) * 5
             figuras_esq.append(nome)
         elif score > 0:
-            score_dir += score * 3
+            score_dir += score * 5
             figuras_dir.append(nome)
 
     return score_esq, score_dir, figuras_esq, figuras_dir
@@ -783,6 +1127,7 @@ def coletar_twitter(username, nome_completo):
             'nitter.net',
             'nitter.cz',
         ]
+        nitter_ok = None
         for instancia in instancias:
             try:
                 url = f'https://{instancia}/{username}'
@@ -814,6 +1159,7 @@ def coletar_twitter(username, nome_completo):
                                 'qtd': len(posts),
                             }
                         )
+                        nitter_ok = instancia
                         break
             except Exception:
                 continue
@@ -826,15 +1172,69 @@ def coletar_twitter(username, nome_completo):
                 }
             )
 
+        # Nitter — tentar buscar lista de seguindo
+        if nitter_ok:
+            logs.append({'fonte': 'X — Seguindo (Nitter)', 'status': 'buscando'})
+            try:
+                url_f = f'https://{nitter_ok}/{username}/following'
+                resp_f = requests.get(url_f, headers=h, timeout=TIMEOUT)
+                if resp_f.status_code == 200:
+                    # Extrai hrefs que parecem usernames do Twitter (2-15 chars)
+                    candidatos = re.findall(
+                        r'href="/([a-zA-Z0-9_]{2,15})"', resp_f.text
+                    )
+                    # Ignorar itens de navegação conhecidos
+                    ignorar = {
+                        username.lower(), 'about', 'login', 'search',
+                        'settings', 'rss', 'media', 'with_replies',
+                    }
+                    vistos_nitter = set()
+                    for uname in candidatos:
+                        uname_l = uname.lower()
+                        if uname_l in ignorar or uname_l in vistos_nitter:
+                            continue
+                        vistos_nitter.add(uname_l)
+                        if uname_l in FIGURAS_POLITICAS:
+                            fig_nome, fig_score = FIGURAS_POLITICAS[uname_l]
+                            seguindo_politicos.append({
+                                'username': uname_l,
+                                'nome': fig_nome,
+                                'score': fig_score,
+                                'descricao': '',
+                            })
+                    if seguindo_politicos:
+                        fontes['X — Seguindo (Nitter)'] = len(seguindo_politicos)
+                        logs.append({
+                            'fonte': 'X — Seguindo (Nitter)',
+                            'status': 'ok',
+                            'qtd': len(seguindo_politicos),
+                            'msg': f'{len(seguindo_politicos)} figuras políticas detectadas',
+                        })
+                    else:
+                        logs.append({
+                            'fonte': 'X — Seguindo (Nitter)',
+                            'status': 'aviso',
+                            'msg': 'Nenhuma figura política na lista de seguindo',
+                        })
+            except Exception as e:
+                logs.append({
+                    'fonte': 'X — Seguindo (Nitter)',
+                    'status': 'aviso',
+                    'msg': f'Não foi possível buscar seguindo: {str(e)[:60]}',
+                })
+
     # 2) Busca web específica do Twitter
     logs.append({'fonte': 'X — Busca Web', 'status': 'buscando'})
     queries = [
-        f'site:x.com OR site:twitter.com @{username} política',
-        f'@{username} twitter opinião política',
+        f'site:x.com/{username} OR site:twitter.com/{username}',
+        f'site:x.com OR site:twitter.com "@{username}" -"@{username}" política',
     ]
     posts_web = []
     for q in queries:
         posts_web.extend(buscar_web(q, max_results=8))
+
+    # Filtrar para garantir que são do username exato
+    posts_web = filtrar_resultados_username(posts_web, username)
 
     for p in posts_web:
         p['fonte'] = 'X — Busca Web'
@@ -865,20 +1265,26 @@ def coletar_instagram(username, nome_completo):
     seguindo_politicos = []
     logs = []
     fontes = {}
+    privado = False
 
     # 1) Busca web por perfil Instagram
     logs.append({'fonte': 'Instagram — Perfil Web', 'status': 'buscando'})
     queries = [
-        f'site:instagram.com "{username}"',
-        f'instagram "{username}" seguindo perfil',
-        f'"{nome_completo}" instagram curtidas interações',
-        f'"{nome_completo}" instagram segue páginas',
+        f'site:instagram.com/{username}',
+        f'instagram.com/{username} perfil',
     ]
+    # Só usar nome_completo se foi fornecido e é diferente do username
+    if nome_completo and nome_completo.lower() != username.lower():
+        queries.append(f'site:instagram.com "{nome_completo}"')
+
     for q in queries:
         resultados = buscar_web(q, max_results=8)
         for r in resultados:
             r['fonte'] = 'Instagram — Busca Web'
         posts.extend(resultados)
+
+    # Filtrar para garantir que são do username exato
+    posts = filtrar_resultados_username(posts, username)
 
     if posts:
         fontes['Instagram — Busca Web'] = len(posts)
@@ -898,7 +1304,48 @@ def coletar_instagram(username, nome_completo):
             }
         )
 
-    # 2) Tentar scraping do perfil público
+    # 2) Busca por curtidas e compartilhamentos com figuras políticas
+    logs.append({'fonte': 'Instagram — Interações', 'status': 'buscando'})
+    queries_interacoes = []
+    if nome_completo and nome_completo.lower() != username.lower():
+        queries_interacoes = [
+            f'"{nome_completo}" instagram curtiu post político',
+            f'"{nome_completo}" instagram compartilhou repostou',
+        ]
+    else:
+        queries_interacoes = [
+            f'instagram.com/{username} curtiu comentou',
+        ]
+    posts_interacoes = []
+    for q in queries_interacoes:
+        resultados = buscar_web(q, max_results=5)
+        for r in resultados:
+            r['fonte'] = 'Instagram — Interações'
+        posts_interacoes.extend(resultados)
+
+    # Filtrar para garantir que são do username exato
+    posts_interacoes = filtrar_resultados_username(posts_interacoes, username)
+
+    if posts_interacoes:
+        posts.extend(posts_interacoes)
+        fontes['Instagram — Interações'] = len(posts_interacoes)
+        logs.append(
+            {
+                'fonte': 'Instagram — Interações',
+                'status': 'ok',
+                'qtd': len(posts_interacoes),
+            }
+        )
+    else:
+        logs.append(
+            {
+                'fonte': 'Instagram — Interações',
+                'status': 'aviso',
+                'msg': 'Nenhuma interação encontrada',
+            }
+        )
+
+    # 3) Tentar scraping do perfil público
     logs.append({'fonte': 'Instagram — Perfil', 'status': 'buscando'})
     try:
         url = f'https://www.instagram.com/{username}/'
@@ -910,6 +1357,17 @@ def coletar_instagram(username, nome_completo):
         resp = requests.get(url, headers=headers, timeout=TIMEOUT)
 
         if resp.status_code == 200:
+            # Detectar perfil privado
+            if '"is_private":true' in resp.text:
+                privado = True
+                logs.append(
+                    {
+                        'fonte': 'Instagram — Perfil',
+                        'status': 'aviso',
+                        'msg': '🔒 Perfil PRIVADO — dados limitados, resultados podem não corresponder ao usuário correto',
+                    }
+                )
+
             bio_match = re.search(r'"biography":"(.*?)"', resp.text)
             if bio_match:
                 bio = (
@@ -967,6 +1425,7 @@ def coletar_instagram(username, nome_completo):
                 }
             )
         else:
+            privado = True
             logs.append(
                 {
                     'fonte': 'Instagram — Perfil',
@@ -975,6 +1434,7 @@ def coletar_instagram(username, nome_completo):
                 }
             )
     except Exception as e:
+        privado = True
         logs.append(
             {
                 'fonte': 'Instagram — Perfil',
@@ -989,6 +1449,14 @@ def coletar_instagram(username, nome_completo):
     resultado = montar_resultado_plataforma(posts, seguindo_politicos)
     resultado['fontes'] = fontes
     resultado['logs'] = logs
+    resultado['privado'] = privado
+    if privado:
+        resultado['aviso_privado'] = (
+            '🔒 O perfil do Instagram é PRIVADO. Como não há API pública, '
+            'os dados foram coletados via buscas web e podem pertencer a OUTRA PESSOA '
+            'com username similar. Os resultados desta rede NÃO são confiáveis — '
+            'considere desmarcar o Instagram na pesquisa.'
+        )
     return resultado
 
 
@@ -998,19 +1466,25 @@ def coletar_facebook(username, nome_completo):
     seguindo_politicos = []
     logs = []
     fontes = {}
+    privado = False
 
     # 1) Busca web por perfil Facebook
     logs.append({'fonte': 'Facebook — Busca Web', 'status': 'buscando'})
     queries = [
-        f'site:facebook.com "{username}" política',
-        f'facebook "{nome_completo}" publicações política',
-        f'"{nome_completo}" facebook posição opinião política',
+        f'site:facebook.com/{username}',
     ]
+    if nome_completo and nome_completo.lower() != username.lower():
+        queries.append(f'site:facebook.com "{nome_completo}"')
+        queries.append(f'"{nome_completo}" facebook posição opinião política')
+
     for q in queries:
         resultados = buscar_web(q, max_results=8)
         for r in resultados:
             r['fonte'] = 'Facebook — Busca Web'
         posts.extend(resultados)
+
+    # Filtrar para garantir que são do username exato
+    posts = filtrar_resultados_username(posts, username)
 
     if posts:
         fontes['Facebook — Busca Web'] = len(posts)
@@ -1030,7 +1504,48 @@ def coletar_facebook(username, nome_completo):
             }
         )
 
-    # 2) Tentar acessar perfil público
+    # 2) Busca por curtidas e compartilhamentos
+    logs.append({'fonte': 'Facebook — Interações', 'status': 'buscando'})
+    queries_interacoes = []
+    if nome_completo and nome_completo.lower() != username.lower():
+        queries_interacoes = [
+            f'"{nome_completo}" facebook curtiu compartilhou',
+            f'"{nome_completo}" facebook reação post político',
+        ]
+    else:
+        queries_interacoes = [
+            f'facebook.com/{username} curtiu compartilhou',
+        ]
+    posts_interacoes = []
+    for q in queries_interacoes:
+        resultados = buscar_web(q, max_results=5)
+        for r in resultados:
+            r['fonte'] = 'Facebook — Interações'
+        posts_interacoes.extend(resultados)
+
+    # Filtrar para garantir que são do username exato
+    posts_interacoes = filtrar_resultados_username(posts_interacoes, username)
+
+    if posts_interacoes:
+        posts.extend(posts_interacoes)
+        fontes['Facebook — Interações'] = len(posts_interacoes)
+        logs.append(
+            {
+                'fonte': 'Facebook — Interações',
+                'status': 'ok',
+                'qtd': len(posts_interacoes),
+            }
+        )
+    else:
+        logs.append(
+            {
+                'fonte': 'Facebook — Interações',
+                'status': 'aviso',
+                'msg': 'Nenhuma interação encontrada',
+            }
+        )
+
+    # 3) Tentar acessar perfil público
     logs.append({'fonte': 'Facebook — Perfil', 'status': 'buscando'})
     try:
         url = f'https://www.facebook.com/{username}'
@@ -1092,6 +1607,7 @@ def coletar_facebook(username, nome_completo):
                 }
             )
         else:
+            privado = True
             logs.append(
                 {
                     'fonte': 'Facebook — Perfil',
@@ -1100,6 +1616,7 @@ def coletar_facebook(username, nome_completo):
                 }
             )
     except Exception as e:
+        privado = True
         logs.append(
             {
                 'fonte': 'Facebook — Perfil',
@@ -1114,6 +1631,14 @@ def coletar_facebook(username, nome_completo):
     resultado = montar_resultado_plataforma(posts, seguindo_politicos)
     resultado['fontes'] = fontes
     resultado['logs'] = logs
+    resultado['privado'] = privado
+    if privado:
+        resultado['aviso_privado'] = (
+            '🔒 O perfil do Facebook é PRIVADO ou inacessível. Como não há API pública, '
+            'os dados foram coletados via buscas web e podem pertencer a OUTRA PESSOA '
+            'com username similar. Os resultados desta rede NÃO são confiáveis — '
+            'considere desmarcar o Facebook na pesquisa.'
+        )
     return resultado
 
 
@@ -1126,11 +1651,16 @@ def coletar_geral(username, nome_completo):
     # Busca web genérica
     logs.append({'fonte': 'Busca Web Geral', 'status': 'buscando'})
     queries = [
-        f'"{nome_completo}" política posição',
-        f'@{username} política opinião',
+        f'"@{username}" política posição',
     ]
+    if nome_completo and nome_completo.lower() != username.lower():
+        queries.append(f'"{nome_completo}" política posição')
+
     for q in queries:
         posts.extend(buscar_web(q, max_results=10))
+
+    # Filtrar para garantir que são do username exato
+    posts = filtrar_resultados_username(posts, username)
 
     if posts:
         fontes['Busca Web Geral'] = len(posts)
@@ -1189,10 +1719,11 @@ def coletar_geral(username, nome_completo):
 # =====================================================
 
 
-def executar_analise(handle, nome_completo=None):
+def executar_analise(handle, nome_completo=None, redes_selecionadas=None):
     """
     Executa análise completa com resultados POR PLATAFORMA.
     Retorna resultado geral + resultado individual de cada rede social.
+    redes_selecionadas: lista de redes para pesquisar ('twitter', 'instagram', 'facebook')
     """
     username = handle.lstrip('@').strip()
     if not username:
@@ -1201,29 +1732,107 @@ def executar_analise(handle, nome_completo=None):
     if not nome_completo:
         nome_completo = username
 
+    if redes_selecionadas is None:
+        redes_selecionadas = ['twitter', 'instagram', 'facebook']
+
     # ===== Coletar por plataforma =====
     plataformas = {}
 
-    plataformas['twitter'] = {
-        'nome': 'X / Twitter',
-        'icone': '🐦',
-        'descricao_coleta': 'Tweets publicados, perfis seguidos, bios',
-        **coletar_twitter(username, nome_completo),
-    }
+    if 'twitter' in redes_selecionadas:
+        plataformas['twitter'] = {
+            'nome': 'X / Twitter',
+            'icone': '🐦',
+            'descricao_coleta': 'Tweets publicados, perfis seguidos, bios',
+            **coletar_twitter(username, nome_completo),
+        }
+    else:
+        plataformas['twitter'] = {
+            'nome': 'X / Twitter',
+            'icone': '🐦',
+            'descricao_coleta': 'Não selecionado pelo usuário',
+            'total_posts': 0,
+            'classificacao': 'NÃO PESQUISADO',
+            'descricao': 'Esta rede não foi selecionada para análise',
+            'esquerda_pct': 0,
+            'direita_pct': 0,
+            'confianca': 'NENHUMA',
+            'cor': '#888888',
+            'pontos_esq': 0,
+            'pontos_dir': 0,
+            'top_palavras_esq': [],
+            'top_palavras_dir': [],
+            'seguindo_politicos': [],
+            'figuras_esq': [],
+            'figuras_dir': [],
+            'exemplos': [],
+            'fontes': {},
+            'logs': [{'fonte': 'X / Twitter', 'status': 'aviso', 'msg': 'Rede não selecionada'}],
+            'pulado': True,
+        }
 
-    plataformas['instagram'] = {
-        'nome': 'Instagram',
-        'icone': '📸',
-        'descricao_coleta': 'Perfil público, curtidas, seguidos',
-        **coletar_instagram(username, nome_completo),
-    }
+    if 'instagram' in redes_selecionadas:
+        plataformas['instagram'] = {
+            'nome': 'Instagram',
+            'icone': '📸',
+            'descricao_coleta': 'Perfil público, curtidas, seguidos',
+            **coletar_instagram(username, nome_completo),
+        }
+    else:
+        plataformas['instagram'] = {
+            'nome': 'Instagram',
+            'icone': '📸',
+            'descricao_coleta': 'Não selecionado pelo usuário',
+            'total_posts': 0,
+            'classificacao': 'NÃO PESQUISADO',
+            'descricao': 'Esta rede não foi selecionada para análise',
+            'esquerda_pct': 0,
+            'direita_pct': 0,
+            'confianca': 'NENHUMA',
+            'cor': '#888888',
+            'pontos_esq': 0,
+            'pontos_dir': 0,
+            'top_palavras_esq': [],
+            'top_palavras_dir': [],
+            'seguindo_politicos': [],
+            'figuras_esq': [],
+            'figuras_dir': [],
+            'exemplos': [],
+            'fontes': {},
+            'logs': [{'fonte': 'Instagram', 'status': 'aviso', 'msg': 'Rede não selecionada'}],
+            'pulado': True,
+        }
 
-    plataformas['facebook'] = {
-        'nome': 'Facebook',
-        'icone': '👤',
-        'descricao_coleta': 'Publicações, curtidas de páginas',
-        **coletar_facebook(username, nome_completo),
-    }
+    if 'facebook' in redes_selecionadas:
+        plataformas['facebook'] = {
+            'nome': 'Facebook',
+            'icone': '👤',
+            'descricao_coleta': 'Publicações, curtidas de páginas',
+            **coletar_facebook(username, nome_completo),
+        }
+    else:
+        plataformas['facebook'] = {
+            'nome': 'Facebook',
+            'icone': '👤',
+            'descricao_coleta': 'Não selecionado pelo usuário',
+            'total_posts': 0,
+            'classificacao': 'NÃO PESQUISADO',
+            'descricao': 'Esta rede não foi selecionada para análise',
+            'esquerda_pct': 0,
+            'direita_pct': 0,
+            'confianca': 'NENHUMA',
+            'cor': '#888888',
+            'pontos_esq': 0,
+            'pontos_dir': 0,
+            'top_palavras_esq': [],
+            'top_palavras_dir': [],
+            'seguindo_politicos': [],
+            'figuras_esq': [],
+            'figuras_dir': [],
+            'exemplos': [],
+            'fontes': {},
+            'logs': [{'fonte': 'Facebook', 'status': 'aviso', 'msg': 'Rede não selecionada'}],
+            'pulado': True,
+        }
 
     # ===== Dados gerais (News, Wiki, Web) =====
     dados_gerais = coletar_geral(username, nome_completo)
