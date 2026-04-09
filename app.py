@@ -7,9 +7,12 @@ baseada em publicações públicas de redes sociais.
 import os
 import secrets
 
+from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
 
 from analisador import executar_analise
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))

@@ -12,6 +12,9 @@ from collections import Counter
 from urllib.parse import quote_plus
 
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 try:
     from ddgs import DDGS
@@ -40,25 +43,23 @@ TIMEOUT = 12
 
 FIGURAS_POLITICAS = {
     # ── ESQUERDA FORTE (-2) ──
-    'luaborges': ('Lua Borges', -2),
     'lulaoficial': ('Lula', -2),
-    'labordes': ('Lula Instagram', -2),
+    'labordes': ('Lula', -2),
     'dilmabr': ('Dilma Rousseff', -2),
     'andrejanonesadv': ('André Janones', -2),
     'guilhermeboulos': ('Guilherme Boulos', -2),
     'guilherme.boulos': ('Guilherme Boulos', -2),
-    'gleaborges': ('Gleisi Hoffmann', -2),
-    'gleaborgs': ('Gleisi Hoffmann', -2),
+    'gleisihoffmannoficial': ('Gleisi Hoffmann', -2),
     'gleisihoffmann': ('Gleisi Hoffmann', -2),
     'fernandohaddad': ('Fernando Haddad', -2),
     'jandirafeghali': ('Jandira Feghali', -2),
     'marcelofreixo': ('Marcelo Freixo', -2),
     'samiabomfim': ('Sâmia Bomfim', -2),
     'pt_brasil': ('PT', -2),
-    'pabordes': ('PT', -2),
+    'ptbrasil': ('PT', -2),
     'pcdoboficial': ('PCdoB', -2),
-    'pabordes45': ('PSOL', -2),
-    'psabordes': ('PSOL', -2),
+    'psol50': ('PSOL', -2),
+    'psoloficial': ('PSOL', -2),
     'gduvivier': ('Gregório Duvivier', -2),
     'gregorioduvivier': ('Gregório Duvivier', -2),
     'jeanwyllys_real': ('Jean Wyllys', -2),
@@ -72,10 +73,9 @@ FIGURAS_POLITICAS = {
     'midianinja': ('Mídia NINJA', -2),
     'tv247': ('TV 247', -2),
     'conversaafiada': ('Conversa Afiada', -2),
-    'foraborges': ('Fórum', -2),
+    'revistaforum': ('Revista Fórum', -2),
     'operamundi': ('Opera Mundi', -2),
     # ── CENTRO-ESQUERDA (-1) ──
-    'ciaborges': ('Ciro Gomes', -1),
     'cirogomes': ('Ciro Gomes', -1),
     'marinasilvabr': ('Marina Silva', -1),
     'marinasilva': ('Marina Silva', -1),
@@ -96,14 +96,13 @@ FIGURAS_POLITICAS = {
     'oglobo': ('O Globo', 0),
     'g1': ('G1', 0),
     'portalg1': ('G1', 0),
-    'uaborges': ('UOL', 0),
     'uol': ('UOL', 0),
     'uolnoticias': ('UOL Notícias', 0),
     'bbcbrasil': ('BBC Brasil', 0),
     'cnn_brasil': ('CNN Brasil', 0),
     'cnnbrasil': ('CNN Brasil', 0),
     'bandnewsfm': ('BandNews', 0),
-    'sabordes': ('SBT', 0),
+    'sbtonline': ('SBT', 0),
     'recordtv': ('Record', 0),
     'jornalnacional': ('Jornal Nacional', 0),
     # ── CENTRO-DIREITA (1) ──
@@ -122,7 +121,6 @@ FIGURAS_POLITICAS = {
     'marcopontes': ('Marcos Pontes', 1),
     'osmarterra': ('Osmar Terra', 1),
     # ── DIREITA FORTE (2) ──
-    'jabordes_': ('Jair Bolsonaro', 2),
     'jairbolsonaro': ('Jair Bolsonaro', 2),
     'bolsonaro': ('Jair Bolsonaro', 2),
     'flaviobolsonaro': ('Flávio Bolsonaro', 2),
@@ -212,26 +210,14 @@ NOMES_DIREITA = {
 }
 
 PALAVRAS_ESQUERDA = {
-    'democracia',
-    'democratico',
-    'direitos',
-    'humanos',
-    'justica',
-    'social',
     'igualdade',
     'trabalhador',
     'trabalhadores',
     'sus',
-    'saude',
-    'publica',
-    'educacao',
     'feminismo',
     'feminista',
     'lgbt',
     'lgbtqia',
-    'diversidade',
-    'inclusao',
-    'ambiente',
     'amazonia',
     'indigena',
     'quilombola',
@@ -247,17 +233,12 @@ PALAVRAS_ESQUERDA = {
     'socialista',
     'progressista',
     'coletivo',
-    'popular',
-    'povo',
     'antifascismo',
     'antifascista',
     'resistencia',
     'redistribuicao',
     'minorias',
     'oprimidos',
-    'intervencao',
-    'regulacao',
-    'soberania',
     'haddad',
     'janones',
     'freixo',
@@ -266,20 +247,12 @@ PALAVRAS_ESQUERDA = {
 }
 
 PALAVRAS_DIREITA = {
-    'liberdade',
-    'economica',
-    'livre',
-    'mercado',
     'capitalismo',
     'empreendedor',
     'empreendedorismo',
     'privatizacao',
     'privatizar',
     'meritocracia',
-    'imposto',
-    'impostos',
-    'reducao',
-    'familia',
     'tradicional',
     'cristaos',
     'cristao',
@@ -287,18 +260,14 @@ PALAVRAS_DIREITA = {
     'conservadorismo',
     'bolsonaro',
     'direita',
-    'corrupcao',
     'petismo',
     'patriota',
     'patriotismo',
     'armamento',
     'armas',
-    'seguranca',
-    'ordem',
     'militar',
     'agronegocio',
     'agro',
-    'liberal',
     'liberalismo',
     'propriedade',
     'privada',
@@ -306,11 +275,6 @@ PALAVRAS_DIREITA = {
     'anticomunista',
     'comunismo',
     'doutrinacao',
-    'ideologia',
-    'genero',
-    'valores',
-    'moral',
-    'nacao',
     'nacionalismo',
     'moro',
     'nikolas',
@@ -905,9 +869,10 @@ def coletar_instagram(username, nome_completo):
     # 1) Busca web por perfil Instagram
     logs.append({'fonte': 'Instagram — Perfil Web', 'status': 'buscando'})
     queries = [
-        f'site:instagram.com "{username}" política',
-        f'instagram @{username} curtidas seguindo política',
-        f'"{nome_completo}" instagram posição política',
+        f'site:instagram.com "{username}"',
+        f'instagram "{username}" seguindo perfil',
+        f'"{nome_completo}" instagram curtidas interações',
+        f'"{nome_completo}" instagram segue páginas',
     ]
     for q in queries:
         resultados = buscar_web(q, max_results=8)
@@ -975,7 +940,16 @@ def coletar_instagram(username, nome_completo):
 
             texto_page = re.sub(r'<[^>]+>', ' ', resp.text).lower()
             for fig_user, (fig_nome, fig_score) in FIGURAS_POLITICAS.items():
-                if fig_user in texto_page or fig_nome.lower() in texto_page:
+                # Exigir word boundary e tamanho mínimo para evitar
+                # falsos positivos com substrings curtas no HTML
+                encontrado = False
+                if len(fig_user) >= 5:
+                    if re.search(r'\b' + re.escape(fig_user) + r'\b', texto_page):
+                        encontrado = True
+                if not encontrado and len(fig_nome) >= 5:
+                    if re.search(r'\b' + re.escape(fig_nome.lower()) + r'\b', texto_page):
+                        encontrado = True
+                if encontrado:
                     seguindo_politicos.append(
                         {
                             'username': fig_user,
@@ -1091,7 +1065,16 @@ def coletar_facebook(username, nome_completo):
 
             texto_lower = texto_page.lower()
             for fig_user, (fig_nome, fig_score) in FIGURAS_POLITICAS.items():
-                if fig_user in texto_lower or fig_nome.lower() in texto_lower:
+                # Exigir word boundary e tamanho mínimo para evitar
+                # falsos positivos com substrings curtas no HTML
+                encontrado = False
+                if len(fig_user) >= 5:
+                    if re.search(r'\b' + re.escape(fig_user) + r'\b', texto_lower):
+                        encontrado = True
+                if not encontrado and len(fig_nome) >= 5:
+                    if re.search(r'\b' + re.escape(fig_nome.lower()) + r'\b', texto_lower):
+                        encontrado = True
+                if encontrado:
                     seguindo_politicos.append(
                         {
                             'username': fig_user,
