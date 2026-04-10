@@ -179,8 +179,13 @@ def api_buscar_deputado():
     except Exception as e:
         return jsonify({'erro': str(e)[:120]}), 500
 
-
+'''
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_DEBUG', '1') == '1'
     app.run(host='0.0.0.0', port=port, debug=debug)
+    '''
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
