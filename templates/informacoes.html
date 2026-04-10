@@ -111,12 +111,14 @@
 
         <h4>Como funciona</h4>
         <ol>
-            <li><strong>Coleta</strong> — o sistema busca dados públicos do perfil em 3 plataformas
-            (Twitter/X, Instagram, Facebook) + fontes complementares (Google News, Wikipédia, DuckDuckGo)</li>
+            <li><strong>Coleta paralela</strong> — o sistema busca dados públicos do perfil em 4 fontes
+            <strong>simultaneamente</strong> via <code>ThreadPoolExecutor</code>:
+            Twitter/X, Instagram, Facebook e Web/Notícias (Google News, Wikipédia, DuckDuckGo).
+            O tempo total equivale à coleta mais lenta, não à soma de todas</li>
             <li><strong>Processamento</strong> — o texto coletado é normalizado (sem acentos, minúsculas) e comparado
             com listas de palavras-chave e nomes de figuras políticas</li>
-            <li><strong>Pontuação</strong> — cada ocorrência gera pontos: palavras-chave = 1pt, nomes = 2pt,
-            figuras políticas seguidas = 3× o score da figura</li>
+            <li><strong>Pontuação</strong> — cada ocorrência gera pontos: palavras-chave simples = 1pt, nomes = 2pt, frases compostas = 2pt,
+            figuras políticas seguidas = <strong>5× o score da figura</strong> (cada figura contada uma vez)</li>
             <li><strong>Classificação</strong> — a proporção entre pontos de esquerda e direita determina a
             classificação final e o percentual de confiança</li>
         </ol>
@@ -141,7 +143,8 @@
                 <span class="calib-num">1</span>
                 <div>
                     <h4>Seleção de figuras de referência</h4>
-                    <p>~120 perfis de políticos, jornalistas, influenciadores e veículos de mídia foram
+                    <p><strong>~430 perfis</strong> de políticos (governadores, senadores, deputados federais), partidos,
+                    jornalistas, influenciadores, ministérios do governo federal e veículos de mídia foram
                     classificados manualmente em uma escala de -2 (esquerda forte) a +2 (direita forte).</p>
                 </div>
             </div>
@@ -149,8 +152,10 @@
                 <span class="calib-num">2</span>
                 <div>
                     <h4>Curadoria de palavras-chave</h4>
-                    <p>~45 termos associados à esquerda e ~45 termos associados à direita foram selecionados
-                    a partir de discursos, hashtags e publicações reais de figuras políticas brasileiras.</p>
+                    <p>50 termos/frases de esquerda e 50 termos/frases de direita foram selecionados
+                    a partir de discursos, hashtags e publicações reais de figuras políticas brasileiras.
+                    Palavras ambíguas foram <strong>removidas</strong> para evitar falsos positivos.
+                    Os bancos estão <strong>balanceados</strong> (mesma quantidade) para não distorcer resultados.</p>
                 </div>
             </div>
             <div class="calib-step">
@@ -158,8 +163,8 @@
                 <div>
                     <h4>Pesos diferenciados</h4>
                     <p>Nem toda evidência tem o mesmo peso:
-                    <strong>Seguir uma figura</strong> é mais revelador que uma menção textual.
-                    Palavras-chave = 1pt, Nomes = 2pt, Figuras seguidas = 3× score.</p>
+                    <strong>Seguir uma figura</strong> é o indicador mais confiável.
+                    Palavras-chave = 1pt, Nomes = 2pt, Frases compostas = 2pt, Figuras seguidas = <strong>5× score</strong>.</p>
                 </div>
             </div>
             <div class="calib-step">
@@ -222,44 +227,65 @@
 
     <div class="keywords-grid">
         <div class="keyword-col keyword-esq">
-            <h3>🔴 Esquerda (~45 termos)</h3>
+            <h3>🔴 Esquerda (50 termos e frases)</h3>
+            <p style="font-size:0.8rem;color:#666;margin-bottom:8px;">32 palavras simples (1pt) e 18 frases compostas (2pt)</p>
             <div class="keyword-cloud">
-                <span>democracia</span><span>direitos</span><span>humanos</span><span>justiça social</span>
-                <span>igualdade</span><span>trabalhador</span><span>SUS</span><span>saúde pública</span>
-                <span>educação</span><span>feminismo</span><span>feminista</span><span>LGBT</span>
-                <span>LGBTQIA</span><span>diversidade</span><span>inclusão</span><span>amazônia</span>
-                <span>indígena</span><span>quilombola</span><span>reforma agrária</span>
-                <span>PT</span><span>PSOL</span><span>PCdoB</span><span>socialismo</span>
-                <span>socialista</span><span>progressista</span><span>coletivo</span><span>popular</span>
-                <span>povo</span><span>antifascismo</span><span>resistência</span>
-                <span>redistribuição</span><span>minorias</span><span>oprimidos</span>
-                <span>regulação</span><span>soberania</span><span>intervenção</span>
+                <span>igualdade</span><span>feminismo</span><span>feminista</span>
+                <span>LGBTQIA</span><span>indígena</span><span>quilombola</span>
+                <span>socialismo</span><span>socialista</span><span>progressista</span>
+                <span>antifascismo</span><span>antifascista</span><span>redistribuição</span>
+                <span>minorias</span><span>oprimidos</span><span>esquerda</span>
+                <span>progressismo</span><span>inclusão</span><span>diversidade</span>
+                <span>PSOL</span><span>PCdoB</span><span>Lula</span><span>Dilma</span>
+                <span>Boulos</span><span>Haddad</span><span>Janones</span><span>Freixo</span>
+                <span>Sakamoto</span>
+                <span>vacinação</span><span>SUS</span><span>desigualdade</span>
+                <span>trabalhismo</span><span>trabalhista</span>
+                <span class="kw-frase">saúde pública</span><span class="kw-frase">saúde coletiva</span>
+                <span class="kw-frase">política pública</span><span class="kw-frase">políticas públicas</span>
+                <span class="kw-frase">assistência social</span><span class="kw-frase">educação pública</span>
+                <span class="kw-frase">Bolsa Família</span><span class="kw-frase">saúde mental</span>
+                <span class="kw-frase">combate à fome</span><span class="kw-frase">Fome Zero</span>
+                <span class="kw-frase">cotas raciais</span><span class="kw-frase">ação afirmativa</span>
+                <span class="kw-frase">movimento social</span><span class="kw-frase">movimentos sociais</span>
+                <span class="kw-frase">reforma agrária</span><span class="kw-frase">direitos humanos</span>
+                <span class="kw-frase">direitos trabalhistas</span><span class="kw-frase">renda básica</span>
             </div>
         </div>
 
         <div class="keyword-col keyword-dir">
-            <h3>🔵 Direita (~45 termos)</h3>
+            <h3>🔵 Direita (50 termos e frases)</h3>
+            <p style="font-size:0.8rem;color:#666;margin-bottom:8px;">30 palavras simples (1pt) e 20 frases compostas (2pt)</p>
             <div class="keyword-cloud">
-                <span>liberdade econômica</span><span>livre mercado</span><span>capitalismo</span>
-                <span>empreendedor</span><span>privatização</span><span>meritocracia</span>
-                <span>redução de impostos</span><span>família tradicional</span>
-                <span>cristão</span><span>conservador</span><span>conservadorismo</span>
-                <span>direita</span><span>petismo</span><span>patriota</span><span>patriotismo</span>
-                <span>armamento</span><span>armas</span><span>segurança</span><span>ordem</span>
-                <span>militar</span><span>agronegócio</span><span>agro</span>
-                <span>liberal</span><span>liberalismo</span><span>propriedade privada</span>
-                <span>anticomunismo</span><span>anticomunista</span><span>doutrinação</span>
-                <span>ideologia de gênero</span><span>valores</span><span>moral</span>
-                <span>nação</span><span>nacionalismo</span><span>corrupção</span>
+                <span>meritocracia</span><span>bolsonaro</span><span>bolsonarismo</span><span>bolsonarista</span>
+                <span>petismo</span><span>petista</span><span>agronegócio</span>
+                <span>neoliberalismo</span><span>privatismo</span><span>anticomunismo</span><span>anticomunista</span>
+                <span>antiesquerda</span><span>doutrinação</span><span>globalismo</span>
+                <span>globalista</span><span>Nikolas</span><span>Zambelli</span>
+                <span>Marçal</span><span>Gayer</span>
+                <span>privatização</span><span>comunismo</span><span>marxismo</span><span>marxista</span>
+                <span>conservadorismo</span><span>olavismo</span><span>olavista</span>
+                <span>armamentismo</span><span>petralha</span><span>mortadela</span><span>patriotismo</span>
+                <span class="kw-frase">ideologia de gênero</span><span class="kw-frase">kit gay</span>
+                <span class="kw-frase">família tradicional</span><span class="kw-frase">valores conservadores</span>
+                <span class="kw-frase">escola sem partido</span><span class="kw-frase">estado mínimo</span>
+                <span class="kw-frase">livre mercado</span><span class="kw-frase">voto impresso</span>
+                <span class="kw-frase">fraude eleitoral</span><span class="kw-frase">intervenção militar</span>
+                <span class="kw-frase">Globo mentira</span><span class="kw-frase">mamãe falei</span>
+                <span class="kw-frase">Brasil acima de tudo</span><span class="kw-frase">Deus acima de todos</span>
+                <span class="kw-frase">porte de arma</span><span class="kw-frase">imposto é roubo</span>
+                <span class="kw-frase">contra o aborto</span><span class="kw-frase">comunismo na educação</span>
+                <span class="kw-frase">aparelhamento do estado</span><span class="kw-frase">menos estado</span>
             </div>
         </div>
     </div>
 
     <div class="doc-card doc-note">
-        <h4>📝 Nota sobre palavras ambíguas</h4>
-        <p>Algumas palavras como "democracia", "liberdade" e "soberania" são usadas por ambos os lados.
-        Nesta versão, cada termo está associado a apenas um lado com base em sua <strong>frequência de uso predominante</strong>
-        no discurso político brasileiro. Uma versão futura poderia usar pesos fracionários ou análise de contexto.</p>
+        <h4>📝 Princípio de especificidade</h4>
+        <p>Palavras genéricas usadas por <strong>ambos os lados</strong> ("democracia", "patriota", "cristão",
+        "empreendedor", "agro", "armado", "popular", "povo") foram <strong>removidas</strong> para evitar
+        falsos positivos. Apenas termos com associação <strong>predominantemente unilateral</strong>
+        no discurso político brasileiro permanecem. Frases compostas (fundo escuro) valem 2pt cada.</p>
     </div>
 </section>
 
@@ -270,9 +296,14 @@
     <h2>👥 Banco de Figuras Políticas</h2>
 
     <div class="doc-card">
-        <p>O app contém ~120 perfis classificados manualmente. Quando o sistema identifica que o usuário
-        analisado <strong>segue</strong> uma dessas figuras, o score da figura é multiplicado por <strong>3×</strong>
-        e adicionado à pontuação. Esta é a evidência de maior peso no modelo.</p>
+        <p>O app contém <strong>~430 perfis</strong> classificados manualmente, incluindo <strong>partidos políticos</strong>,
+        <strong>governadores</strong>, <strong>senadores</strong>, <strong>deputados federais</strong> (de diversos partidos: PT, PSOL, PCdoB, PSB, PDT, MDB, PSD, PP, PSDB, União Brasil, Republicanos, NOVO, Podemos e PL),
+        lideranças nacionais, ministérios do governo federal e veículos de mídia.
+        Quando o sistema identifica que o usuário analisado <strong>segue</strong> uma dessas figuras,
+        o score da figura é multiplicado por <strong>5×</strong> e adicionado à pontuação.
+        Esta é a evidência de maior peso no modelo, e cada figura é contada apenas uma vez.</p>
+        <p>Além disso, o sistema mantém listas de <strong>~56 nomes de esquerda</strong> e <strong>~48 nomes de direita</strong>
+        para detecção textual em notícias, bios e publicações (peso 2pt por menção).</p>
     </div>
 
     <div class="fig-table-wrap">
@@ -288,27 +319,61 @@
                 <tr class="fig-row-esq-forte">
                     <td><strong>-2</strong></td>
                     <td>Esquerda Forte</td>
-                    <td>Lula, Dilma, Boulos, Janones, Gleisi, Freixo, Jean Wyllys, Gregório Duvivier, Jones Manoel, Sabrina Fernandes, Brasil 247, Mídia NINJA, DCM, Opera Mundi</td>
+                    <td>
+                        <strong>Partidos:</strong> PT, PCdoB, PSOL<br>
+                        <strong>Governo Lula:</strong> Min. Saúde, Fiocruz, Gov. Federal, Planalto, MEC, Agência Brasil, Min. Meio Ambiente, Min. Cidades<br>
+                        <strong>Lideranças:</strong> Lula, Dilma, Boulos, Janones, Gleisi, Freixo, Jean Wyllys, Gregório Duvivier, Jones Manoel, Sabrina Fernandes<br>
+                        <strong>Governadores:</strong> Elmano (CE/PT), Jerônimo (BA/PT), Fátima (RN/PT), Camilo Santana, Rafael Fonteles (PI/PT)<br>
+                        <strong>Senadores:</strong> Paulo Paim, Randolfe, Humberto Costa, Jaques Wagner, Fabiano Contarato, Rogério Carvalho, Paulo Rocha<br>
+                        <strong>Deputados:</strong> Sâmia Bomfim, Glauber Braga, Taliria, Fernanda Melchionna, Jandira Feghali, Erika Kokay, Erika Hilton, Luíza Erundina, Benedita da Silva, Paulo Teixeira, Vicentinho, Perpétua Almeida, Alice Portugal, Léo Péricles, Rui Falcão, Zeca Dirceu, Chico Alencar<br>
+                        <strong>Mídia:</strong> Brasil 247, Mídia NINJA, DCM Online, Opera Mundi, Revista Fórum
+                    </td>
                 </tr>
                 <tr class="fig-row-esq">
                     <td><strong>-1</strong></td>
                     <td>Centro-Esquerda</td>
-                    <td>Ciro Gomes, Marina Silva, Flávio Dino, Tabata Amaral, Reinaldo Azevedo, Carta Capital, The Intercept Brasil</td>
+                    <td>
+                        <strong>Partidos:</strong> PDT, PSB, Rede Sustentabilidade<br>
+                        <strong>Lideranças:</strong> Ciro Gomes, Marina Silva, Flávio Dino, Tabata Amaral, Reinaldo Azevedo, Luís Nassif, Juca Kfouri<br>
+                        <strong>Governadores:</strong> Helder Barbalho (PA/MDB), Casagrande (ES/PSB), João Campos (Recife/PSB), Clécio Luís (AP/PDT)<br>
+                        <strong>Senadores:</strong> Renan Calheiros, Omar Aziz, Eliziane Gama, Weverton Rocha<br>
+                        <strong>Deputados:</strong> Alessandro Molon, Tabata Amaral, Marcelo Calero, Bacelar (PSB/BA), Wolney Queiroz (PDT/PE)<br>
+                        <strong>Mídia:</strong> Carta Capital, The Intercept Brasil
+                    </td>
                 </tr>
                 <tr class="fig-row-centro">
                     <td><strong>0</strong></td>
                     <td>Centro (Imprensa)</td>
-                    <td>Folha de S.Paulo, Estadão, O Globo, G1, UOL, BBC Brasil, CNN Brasil, BandNews, SBT, Record, Jornal Nacional</td>
+                    <td>
+                        <strong>Partidos:</strong> MDB, PSD, Cidadania, Avante, Solidariedade<br>
+                        <strong>Líderes:</strong> Rodrigo Pacheco (Pres. Senado), Eduardo Leite (Gov. RS), Ibaneis (Gov. DF), Raquel Lyra (Gov. PE), Paulo Dantas (Gov. AL)<br>
+                        <strong>Deputados:</strong> Baleia Rossi (MDB/SP), Laura Carneiro (PSD/RJ), Paulinho da Força (Solid./SP)<br>
+                        <strong>Mídia:</strong> Folha de S.Paulo, Estadão, O Globo, G1, UOL, BBC Brasil, CNN Brasil, BandNews, SBT, Record, Jornal Nacional, Correio Braziliense, Valor Econômico, Agência Senado, Agência Câmara
+                    </td>
                 </tr>
                 <tr class="fig-row-dir">
                     <td><strong>+1</strong></td>
                     <td>Centro-Direita</td>
-                    <td>Tarcísio, Sérgio Moro, Romeu Zema, Kim Kataguiri, Van Hattem, Alexandre Garcia, Jovem Pan, Gazeta do Povo, O Antagonista</td>
+                    <td>
+                        <strong>Partidos:</strong> PSDB, União Brasil, Podemos, Republicanos, PP, NOVO<br>
+                        <strong>Lideranças:</strong> Tarcísio (Gov. SP), Sérgio Moro (Sen.), Romeu Zema (Gov. MG), Kim Kataguiri, Van Hattem, Osmar Terra, Hamilton Mourão<br>
+                        <strong>Governadores:</strong> Ratinho Jr (PR/PSD), Caiado (GO/União), Mauro Mendes (MT/União), Eduardo Riedel (MS/PSDB), Wanderlei Barbosa (TO/Rep.)<br>
+                        <strong>Senadores:</strong> Ciro Nogueira, Efraim Filho, Marcos do Val, Marcos Pontes<br>
+                        <strong>Deputados:</strong> Arthur Lira (PP/AL), Aécio Neves (PSDB/MG), Elmar Nascimento (União/BA), Celso Russomanno (Rep./SP), Tiago Mitraud (NOVO/MG), Rosângela Moro (União/SP)<br>
+                        <strong>Mídia:</strong> Jovem Pan, Gazeta do Povo, O Antagonista, Alexandre Garcia, Leandro Narloch
+                    </td>
                 </tr>
                 <tr class="fig-row-dir-forte">
                     <td><strong>+2</strong></td>
                     <td>Direita Forte</td>
-                    <td>Bolsonaro (família), Nikolas Ferreira, Carla Zambelli, Damares, Pablo Marçal, Rodrigo Constantino, Brasil Paralelo, Revista Oeste, Terça Livre</td>
+                    <td>
+                        <strong>Partidos:</strong> PL<br>
+                        <strong>Lideranças:</strong> Bolsonaro (família), Nikolas Ferreira, Carla Zambelli, Damares Alves, Pablo Marçal, Rodrigo Constantino, Allan dos Santos, Bernardo Küster<br>
+                        <strong>Governadores:</strong> Jorginho Mello (SC/PL), Cláudio Castro (RJ/PL)<br>
+                        <strong>Senadores:</strong> Flávio Bolsonaro, Damares, General Girão, Marcos Rogério<br>
+                        <strong>Deputados:</strong> Eduardo Bolsonaro, Bia Kicis, Marco Feliciano, Sóstenes Cavalcante, André Fernandes, Daniel Silveira, Filipe Barros, Coronel Tadeu, Chris Tonietto, Delegado Bilynsky, Gustavo Gayer, Hélio Lopes, Lincoln Portela, Luiz Philippe de Orléans e dezenas de outros deputados do PL<br>
+                        <strong>Mídia:</strong> Brasil Paralelo, Revista Oeste, Terça Livre, Senso Incomum, Conexão Política
+                    </td>
                 </tr>
             </tbody>
         </table>

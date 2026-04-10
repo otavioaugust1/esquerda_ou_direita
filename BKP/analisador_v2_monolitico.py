@@ -9,7 +9,7 @@ import json
 import os
 import re
 from collections import Counter
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlparse
 
 import requests
 from dotenv import load_dotenv
@@ -111,7 +111,6 @@ FIGURAS_POLITICAS = {
     'cfm_oficial': ('CFM', -2),
     'alexandresilveira': ('Alexandre Silveira', -2),
     'jorgemeseias': ('Jorge Messias', -2),
-    'analuisaaguimaraes': ('Ana Luísa Aguimarães', -2),
     'min_meio_ambiente': ('Min. Meio Ambiente', -2),
     'mcidades_oficial': ('Min. Cidades', -2),
     'mturismobrasil': ('Min. Turismo', -2),
@@ -436,14 +435,13 @@ NOMES_DIREITA = {
 # REGRA: REMOVER palavras que qualquer pessoa (mesmo do lado oposto) usa.
 # Manter apenas termos suficientemente específicos.
 PALAVRAS_ESQUERDA = {
-    # identidade / movimento
+    # identidade / movimento (14)
     'igualdade',
     'feminismo',
     'feminista',
     'lgbtqia',
     'indigena',
     'quilombola',
-    'reforma agraria',
     'socialismo',
     'socialista',
     'progressista',
@@ -456,7 +454,7 @@ PALAVRAS_ESQUERDA = {
     'progressismo',
     'inclusao',
     'diversidade',
-    # nomes específicos (curtos o suficiente para serem palavras)
+    # nomes específicos (9)
     'psol',
     'pcdob',
     'lula',
@@ -465,29 +463,22 @@ PALAVRAS_ESQUERDA = {
     'haddad',
     'janones',
     'freixo',
-    'duvivier',
     'sakamoto',
-    'fiocruz',
-    # saúde pública / governo (como frases para evitar falsos positivos)
+    # saúde / governo (5)
     'vacinacao',
-    'vacina',
-    'epidemiologia',
     'sus',
     'desigualdade',
     'trabalhismo',
     'trabalhista',
-    # frases específicas (multi-token, matched por substring)
+    # frases específicas (multi-token, matched por substring) (18)
     'saude publica',
     'saude coletiva',
-    'governo federal',
     'politica publica',
     'politicas publicas',
     'assistencia social',
     'educacao publica',
     'bolsa familia',
-    'vigilancia sanitaria',
     'saude mental',
-    'reducao de danos',
     'combate a fome',
     'fome zero',
     'cotas raciais',
@@ -497,12 +488,12 @@ PALAVRAS_ESQUERDA = {
     'reforma agraria',
     'direitos humanos',
     'direitos trabalhistas',
-    'estado de bem estar',
     'renda basica',
 }
+# total ESQUERDA: 32 simples + 18 frases = 50
 
 PALAVRAS_DIREITA = {
-    # termos específicos de direita
+    # termos específicos de direita (30)
     'meritocracia',
     'bolsonaro',
     'bolsonarismo',
@@ -522,7 +513,18 @@ PALAVRAS_DIREITA = {
     'zambelli',
     'marcal',
     'gayer',
-    # frases específicas de direita
+    'privatizacao',
+    'comunismo',
+    'marxismo',
+    'marxista',
+    'conservadorismo',
+    'olavismo',
+    'olavista',
+    'armamentismo',
+    'petralha',
+    'mortadela',
+    'patriotismo',
+    # frases específicas de direita (20)
     'kit gay',
     'ideologia de genero',
     'familia tradicional',
@@ -534,7 +536,17 @@ PALAVRAS_DIREITA = {
     'fraude eleitoral',
     'intervencao militar',
     'globo mentira',
+    'mamae falei',
+    'brasil acima de tudo',
+    'deus acima de todos',
+    'porte de arma',
+    'imposto e roubo',
+    'contra o aborto',
+    'comunismo na educacao',
+    'aparelhamento do estado',
+    'menos estado',
 }
+# total DIREITA: 30 simples + 20 frases = 50
 
 
 # =========================
@@ -568,13 +580,10 @@ def normalizar_texto(texto):
 def filtrar_resultados_username(posts, username):
     """
     Filtra resultados para garantir que pertencem ao username EXATO.
-    Descarta resultados que mencionam usernames similares mas diferentes
-    (ex: pesquisou 'otavioaugust' mas encontrou '_otavioaugust', 'otavioaugust98',
-    'otavio_auguston', etc.).
+    - Se há @menções ou URLs de rede social no resultado, exige match exato.
+    - Se não há menções, exige que o username apareça no texto ou URL.
     """
     username_lower = username.lower()
-    # Normalizado: sem underscores e pontos, para detectar variações
-    username_norm = username_lower.replace('_', '').replace('.', '')
     filtrados = []
 
     for post in posts:
@@ -585,45 +594,25 @@ def filtrar_resultados_username(posts, username):
         # Extrair menções de @ e usernames de URLs de redes sociais
         mencoes_at = re.findall(r'@([a-zA-Z0-9_.]+)', combinado)
         mencoes_url = re.findall(
-            r'(?:twitter\.com|x\.com|instagram\.com|facebook\.com)/([a-zA-Z0-9_.]+)',
+            r'(?:twitter\.com|x\.com|instagram\.com|facebook\.com|nitter\.[a-z.]+)/([a-zA-Z0-9_.]+)',
             combinado,
         )
 
         todas_mencoes = mencoes_at + mencoes_url
 
         if todas_mencoes:
+            # Há menções detectáveis — exigir match exato
             tem_exato = False
-            tem_confuso = False
             for mencao in todas_mencoes:
                 mencao = mencao.rstrip('/').lower()
                 if mencao == username_lower:
                     tem_exato = True
-                    continue
-
-                # Normalizar a menção para comparação
-                mencao_norm = mencao.replace('_', '').replace('.', '')
-
-                # Detectar usernames confusos: variações do target
-                # Caso 1: um contém o outro (ex: otavioaugust98, _otavioaugust)
-                if mencao_norm and username_norm and (
-                    username_norm in mencao_norm or mencao_norm in username_norm
-                ):
-                    tem_confuso = True
-                    continue
-
-                # Caso 2: prefixo longo em comum (≥6 chars)
-                prefixo_comum = 0
-                for a, b in zip(mencao_norm, username_norm):
-                    if a == b:
-                        prefixo_comum += 1
-                    else:
-                        break
-                if prefixo_comum >= 6:
-                    tem_confuso = True
-
-            # Se encontrou username confuso (similar mas diferente)
-            # e NÃO encontrou o exato, descartar este resultado
-            if tem_confuso and not tem_exato:
+                    break
+            if not tem_exato:
+                continue
+        else:
+            # Sem menções de rede social — aceitar se o username aparece no texto/url
+            if username_lower not in combinado:
                 continue
 
         filtrados.append(post)
@@ -631,9 +620,67 @@ def filtrar_resultados_username(posts, username):
     return filtrados
 
 
+def filtrar_por_dominio(posts, dominios_aceitos):
+    """
+    Filtra posts para manter apenas URLs de domínios aceitos.
+    dominios_aceitos: lista de strings como 'instagram.com', 'x.com', etc.
+    Posts sem URL são descartados.
+    """
+    filtrados = []
+    for post in posts:
+        url = post.get('url', '').lower()
+        if any(d in url for d in dominios_aceitos):
+            filtrados.append(post)
+    return filtrados
+
+
 def buscar_web(query, max_results=15):
-    """Busca web usando ddgs (lib) com fallback para Bing."""
+    """Busca web usando ddgs (lib) com fallback para Bing.
+    Filtra automaticamente resultados estrangeiros/irrelevantes.
+    """
     posts = []
+
+    # Padrão para detectar texto em scripts não-latinos (cirílico, CJK, árabe, etc.)
+    _SCRIPT_ESTRANGEIRO = re.compile(
+        r'[\u0400-\u04FF\u0500-\u052F'   # Cirílico (russo, ucraniano, etc.)
+        r'\u4E00-\u9FFF\u3400-\u4DBF'     # CJK (chinês, japonês kanji)
+        r'\u3040-\u309F\u30A0-\u30FF'     # Hiragana + Katakana (japonês)
+        r'\uAC00-\uD7AF'                   # Hangul (coreano)
+        r'\u0600-\u06FF'                   # Árabe
+        r'\u0E00-\u0E7F'                   # Tailandês
+        r']',
+    )
+
+    # TLDs estrangeiros que nunca são relevantes para análise brasileira
+    _TLDS_BLOQUEADOS = (
+        '.ru', '.cn', '.jp', '.kr', '.kz', '.ua', '.by', '.su',
+        '.ir', '.th', '.vn', '.in', '.pk', '.sa', '.ae',
+    )
+
+    # Domínios específicos estrangeiros/irrelevantes
+    _DOMINIOS_BLOQUEADOS = (
+        'vkvideo.ru', 'vk.com', 'vk.ru', 'ok.ru', 'mail.ru',
+        'weibo.com', 'baidu.com', 'yandex.', 'qq.com',
+        'naver.com', 'daum.net', 'rakuten.',
+        'tiktok.com',
+    )
+
+    def _resultado_relevante(href, texto):
+        """Retorna True se o resultado parece ser brasileiro/relevante."""
+        href_lower = href.lower()
+        try:
+            dominio = urlparse(href_lower).hostname or ''
+        except Exception:
+            dominio = ''
+        if any(dominio.endswith(tld) for tld in _TLDS_BLOQUEADOS):
+            return False
+        # Bloquear domínios específicos
+        if any(d in href_lower for d in _DOMINIOS_BLOQUEADOS):
+            return False
+        # Bloquear texto com scripts não-latinos (russo, chinês, etc.)
+        if _SCRIPT_ESTRANGEIRO.search(texto):
+            return False
+        return True
 
     if HAS_DDGS:
         try:
@@ -642,15 +689,19 @@ def buscar_web(query, max_results=15):
             for r in results:
                 titulo = r.get('title', '')
                 body = r.get('body', '')
+                href = r.get('href', '')
                 texto = f'{titulo}. {body}'
-                if len(texto) > 20:
-                    posts.append(
-                        {
-                            'texto': texto,
-                            'fonte': 'Busca Web',
-                            'url': r.get('href', ''),
-                        }
-                    )
+                if len(texto) <= 20:
+                    continue
+                if not _resultado_relevante(href, texto):
+                    continue
+                posts.append(
+                    {
+                        'texto': texto,
+                        'fonte': 'Busca Web',
+                        'url': href,
+                    }
+                )
             return posts
         except Exception:
             pass
@@ -668,18 +719,21 @@ def buscar_web(query, max_results=15):
 
         if resp.status_code == 200:
             results = re.findall(
-                r'<h2><a[^>]*>(.*?)</a></h2>.*?<p[^>]*>(.*?)</p>',
+                r'<h2><a[^>]*href="([^"]*)"[^>]*>(.*?)</a></h2>.*?<p[^>]*>(.*?)</p>',
                 resp.text,
                 re.DOTALL,
             )
-            for titulo, snippet in results[:max_results]:
+            for href, titulo, snippet in results[:max_results]:
                 titulo = re.sub(r'<[^>]+>', '', titulo).strip()
                 snippet = re.sub(r'<[^>]+>', '', snippet).strip()
                 texto = f'{titulo}. {snippet}'
-                if len(texto) > 20:
-                    posts.append(
-                        {'texto': texto, 'fonte': 'Busca Web', 'url': ''}
-                    )
+                if len(texto) <= 20:
+                    continue
+                if not _resultado_relevante(href, texto):
+                    continue
+                posts.append(
+                    {'texto': texto, 'fonte': 'Busca Web', 'url': href}
+                )
     except Exception:
         pass
 
@@ -1227,13 +1281,16 @@ def coletar_twitter(username, nome_completo):
     logs.append({'fonte': 'X — Busca Web', 'status': 'buscando'})
     queries = [
         f'site:x.com/{username} OR site:twitter.com/{username}',
-        f'site:x.com OR site:twitter.com "@{username}" -"@{username}" política',
+        f'(site:x.com OR site:twitter.com) "@{username}"',
+        f'"x.com/{username}" OR "twitter.com/{username}"',
+        f'"@{username}" twitter OR x.com',
     ]
     posts_web = []
     for q in queries:
         posts_web.extend(buscar_web(q, max_results=8))
 
-    # Filtrar para garantir que são do username exato
+    # Manter apenas URLs do Twitter/X e filtrar username exato
+    posts_web = filtrar_por_dominio(posts_web, ['x.com', 'twitter.com', 'nitter.'])
     posts_web = filtrar_resultados_username(posts_web, username)
 
     for p in posts_web:
@@ -1267,32 +1324,48 @@ def coletar_instagram(username, nome_completo):
     fontes = {}
     privado = False
 
-    # 1) Busca web por perfil Instagram
+    # 1) Busca por USERNAME — filtro exato aplicado
     logs.append({'fonte': 'Instagram — Perfil Web', 'status': 'buscando'})
-    queries = [
+    queries_user = [
         f'site:instagram.com/{username}',
-        f'instagram.com/{username} perfil',
+        f'"instagram.com/{username}"',
+        f'"@{username}" instagram',
     ]
-    # Só usar nome_completo se foi fornecido e é diferente do username
-    if nome_completo and nome_completo.lower() != username.lower():
-        queries.append(f'site:instagram.com "{nome_completo}"')
-
-    for q in queries:
+    posts_user = []
+    for q in queries_user:
         resultados = buscar_web(q, max_results=8)
         for r in resultados:
             r['fonte'] = 'Instagram — Busca Web'
-        posts.extend(resultados)
+        posts_user.extend(resultados)
+    # Filtrar pelo username exato para evitar perfis errados
+    posts_user = filtrar_resultados_username(posts_user, username)
+    posts.extend(posts_user)
 
-    # Filtrar para garantir que são do username exato
-    posts = filtrar_resultados_username(posts, username)
+    # 2) Busca por NOME COMPLETO — sem filtro de username
+    # Captura reportagens, entrevistas, notícias sobre a pessoa
+    tem_nome = nome_completo and nome_completo.lower() != username.lower()
+    posts_nome = []
+    if tem_nome:
+        queries_nome = [
+            f'"{nome_completo}" instagram',
+            f'"{nome_completo}" política opinião',
+            f'"{nome_completo}" posicionamento declaração',
+        ]
+        for q in queries_nome:
+            resultados = buscar_web(q, max_results=8)
+            for r in resultados:
+                r['fonte'] = 'Instagram — Reportagens'
+            posts_nome.extend(resultados)
+        posts.extend(posts_nome)
 
-    if posts:
-        fontes['Instagram — Busca Web'] = len(posts)
+    qtd_total = len(posts_user) + len(posts_nome)
+    if qtd_total > 0:
+        fontes['Instagram — Busca Web'] = qtd_total
         logs.append(
             {
                 'fonte': 'Instagram — Perfil Web',
                 'status': 'ok',
-                'qtd': len(posts),
+                'qtd': qtd_total,
             }
         )
     else:
@@ -1304,26 +1377,18 @@ def coletar_instagram(username, nome_completo):
             }
         )
 
-    # 2) Busca por curtidas e compartilhamentos com figuras políticas
+    # 3) Busca por interações politicas
     logs.append({'fonte': 'Instagram — Interações', 'status': 'buscando'})
-    queries_interacoes = []
-    if nome_completo and nome_completo.lower() != username.lower():
-        queries_interacoes = [
-            f'"{nome_completo}" instagram curtiu post político',
-            f'"{nome_completo}" instagram compartilhou repostou',
-        ]
-    else:
-        queries_interacoes = [
-            f'instagram.com/{username} curtiu comentou',
-        ]
+    queries_interacoes = [f'"@{username}" instagram curtiu comentou']
+    if tem_nome:
+        queries_interacoes.append(f'"{nome_completo}" instagram compartilhou repostou')
     posts_interacoes = []
     for q in queries_interacoes:
         resultados = buscar_web(q, max_results=5)
         for r in resultados:
             r['fonte'] = 'Instagram — Interações'
         posts_interacoes.extend(resultados)
-
-    # Filtrar para garantir que são do username exato
+    # Filtrar pelo username exato (interações são específicas por conta)
     posts_interacoes = filtrar_resultados_username(posts_interacoes, username)
 
     if posts_interacoes:
@@ -1344,7 +1409,6 @@ def coletar_instagram(username, nome_completo):
                 'msg': 'Nenhuma interação encontrada',
             }
         )
-
     # 3) Tentar scraping do perfil público
     logs.append({'fonte': 'Instagram — Perfil', 'status': 'buscando'})
     try:
@@ -1468,82 +1532,63 @@ def coletar_facebook(username, nome_completo):
     fontes = {}
     privado = False
 
-    # 1) Busca web por perfil Facebook
+    # 1) Busca por USERNAME — filtro exato aplicado
     logs.append({'fonte': 'Facebook — Busca Web', 'status': 'buscando'})
-    queries = [
+    queries_user = [
         f'site:facebook.com/{username}',
+        f'"facebook.com/{username}"',
+        f'"@{username}" facebook OR fb.com',
     ]
-    if nome_completo and nome_completo.lower() != username.lower():
-        queries.append(f'site:facebook.com "{nome_completo}"')
-        queries.append(f'"{nome_completo}" facebook posição opinião política')
-
-    for q in queries:
+    posts_user = []
+    for q in queries_user:
         resultados = buscar_web(q, max_results=8)
         for r in resultados:
             r['fonte'] = 'Facebook — Busca Web'
-        posts.extend(resultados)
+        posts_user.extend(resultados)
+    posts_user = filtrar_resultados_username(posts_user, username)
+    posts.extend(posts_user)
 
-    # Filtrar para garantir que são do username exato
-    posts = filtrar_resultados_username(posts, username)
+    # 2) Busca por NOME COMPLETO — sem filtro de username
+    tem_nome = nome_completo and nome_completo.lower() != username.lower()
+    posts_nome = []
+    if tem_nome:
+        queries_nome = [
+            f'"{nome_completo}" facebook',
+            f'"{nome_completo}" política opinião declaração',
+        ]
+        for q in queries_nome:
+            resultados = buscar_web(q, max_results=8)
+            for r in resultados:
+                r['fonte'] = 'Facebook — Reportagens'
+            posts_nome.extend(resultados)
+        posts.extend(posts_nome)
 
-    if posts:
-        fontes['Facebook — Busca Web'] = len(posts)
-        logs.append(
-            {
-                'fonte': 'Facebook — Busca Web',
-                'status': 'ok',
-                'qtd': len(posts),
-            }
-        )
+    qtd_total = len(posts_user) + len(posts_nome)
+    if qtd_total > 0:
+        fontes['Facebook — Busca Web'] = qtd_total
+        logs.append({'fonte': 'Facebook — Busca Web', 'status': 'ok', 'qtd': qtd_total})
     else:
-        logs.append(
-            {
-                'fonte': 'Facebook — Busca Web',
-                'status': 'aviso',
-                'msg': 'Nenhum conteúdo público encontrado',
-            }
-        )
+        logs.append({'fonte': 'Facebook — Busca Web', 'status': 'aviso', 'msg': 'Nenhum conteúdo público encontrado'})
 
-    # 2) Busca por curtidas e compartilhamentos
+    # 3) Busca por interações
     logs.append({'fonte': 'Facebook — Interações', 'status': 'buscando'})
-    queries_interacoes = []
-    if nome_completo and nome_completo.lower() != username.lower():
-        queries_interacoes = [
-            f'"{nome_completo}" facebook curtiu compartilhou',
-            f'"{nome_completo}" facebook reação post político',
-        ]
-    else:
-        queries_interacoes = [
-            f'facebook.com/{username} curtiu compartilhou',
-        ]
+    queries_interacoes = [f'"@{username}" facebook curtiu compartilhou']
+    if tem_nome:
+        queries_interacoes.append(f'"{nome_completo}" facebook reação post político')
     posts_interacoes = []
     for q in queries_interacoes:
         resultados = buscar_web(q, max_results=5)
         for r in resultados:
             r['fonte'] = 'Facebook — Interações'
         posts_interacoes.extend(resultados)
-
-    # Filtrar para garantir que são do username exato
     posts_interacoes = filtrar_resultados_username(posts_interacoes, username)
 
     if posts_interacoes:
         posts.extend(posts_interacoes)
         fontes['Facebook — Interações'] = len(posts_interacoes)
-        logs.append(
-            {
-                'fonte': 'Facebook — Interações',
-                'status': 'ok',
-                'qtd': len(posts_interacoes),
-            }
-        )
+        logs.append({'fonte': 'Facebook — Interações', 'status': 'ok', 'qtd': len(posts_interacoes)})
     else:
-        logs.append(
-            {
-                'fonte': 'Facebook — Interações',
-                'status': 'aviso',
-                'msg': 'Nenhuma interação encontrada',
-            }
-        )
+        logs.append({'fonte': 'Facebook — Interações', 'status': 'aviso', 'msg': 'Nenhuma interação encontrada'})
 
     # 3) Tentar acessar perfil público
     logs.append({'fonte': 'Facebook — Perfil', 'status': 'buscando'})
@@ -1650,31 +1695,37 @@ def coletar_geral(username, nome_completo):
 
     # Busca web genérica
     logs.append({'fonte': 'Busca Web Geral', 'status': 'buscando'})
-    queries = [
-        f'"@{username}" política posição',
+    tem_nome = nome_completo and nome_completo.lower() != username.lower()
+
+    # Buscas por USERNAME — filtro exato
+    queries_user = [
+        f'"@{username}"',
+        f'"{username}" redes sociais',
     ]
-    if nome_completo and nome_completo.lower() != username.lower():
-        queries.append(f'"{nome_completo}" política posição')
+    posts_user = []
+    for q in queries_user:
+        posts_user.extend(buscar_web(q, max_results=10))
+    posts_user = filtrar_resultados_username(posts_user, username)
+    posts.extend(posts_user)
 
-    for q in queries:
-        posts.extend(buscar_web(q, max_results=10))
+    # Buscas por NOME COMPLETO — sem filtro, captura reportagens e opiniões
+    posts_nome = []
+    if tem_nome:
+        queries_nome = [
+            f'"{nome_completo}" política opinião',
+            f'"{nome_completo}" esquerda OR direita OR governo OR petista OR bolsonarista',
+            f'"{nome_completo}" declaração entrevista posicionamento',
+        ]
+        for q in queries_nome:
+            posts_nome.extend(buscar_web(q, max_results=10))
+        posts.extend(posts_nome)
 
-    # Filtrar para garantir que são do username exato
-    posts = filtrar_resultados_username(posts, username)
-
-    if posts:
-        fontes['Busca Web Geral'] = len(posts)
-        logs.append(
-            {'fonte': 'Busca Web Geral', 'status': 'ok', 'qtd': len(posts)}
-        )
+    qtd_total = len(posts_user) + len(posts_nome)
+    if qtd_total > 0:
+        fontes['Busca Web Geral'] = qtd_total
+        logs.append({'fonte': 'Busca Web Geral', 'status': 'ok', 'qtd': qtd_total})
     else:
-        logs.append(
-            {
-                'fonte': 'Busca Web Geral',
-                'status': 'aviso',
-                'msg': 'Nenhum resultado',
-            }
-        )
+        logs.append({'fonte': 'Busca Web Geral', 'status': 'aviso', 'msg': 'Nenhum resultado'})
 
     # Google News
     logs.append({'fonte': 'Google News', 'status': 'buscando'})

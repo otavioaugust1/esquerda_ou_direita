@@ -29,8 +29,18 @@ Este aplicativo web coleta **dados exclusivamente públicos** de redes sociais (
 esquerda_ou_direita/
 │
 ├── app.py                  # Servidor Flask (rotas web e API JSON)
-├── analisador.py           # Motor de análise (coleta + classificação)
+├── render.yaml             # Configuração de deploy no Render
 ├── requirements.txt        # Dependências Python
+│
+├── analisador/             # Pacote de análise (módulos independentes)
+│   ├── __init__.py         # executar_analise — orquestra coleta PARALELA
+│   ├── dados.py            # Constantes: FIGURAS_POLITICAS, PALAVRAS_*, NOMES_*
+│   ├── utils.py            # Normalização, filtros, buscar_web/noticias/wikipedia
+│   ├── analise.py          # Pontuação e classificação política
+│   ├── twitter.py          # Coleta Twitter/X (API v2, Nitter, busca web)
+│   ├── instagram.py        # Coleta Instagram (scraping + busca web)
+│   ├── facebook.py         # Coleta Facebook (scraping + busca web)
+│   └── geral.py            # Coleta Web/Notícias (Google News, Wikipédia)
 │
 ├── templates/
 │   ├── base.html           # Layout base (header, footer)
@@ -58,11 +68,11 @@ esquerda_ou_direita/
 - Python 3.10+
 - pip
 
-### Instalação
+### Instalação local
 
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/otavioaugust/esquerda_ou_direita.git
+git clone https://github.com/otavioaugust1/esquerda_ou_direita.git
 cd esquerda_ou_direita
 
 # 2. Criar ambiente virtual
@@ -82,6 +92,15 @@ python app.py
 
 O servidor estará disponível em **http://127.0.0.1:5000**.
 
+### Deploy no Render (produção)
+
+O projeto inclui `render.yaml` pronto para deploy:
+
+1. Acesse [render.com](https://render.com) e conecte o repositório
+2. O Render detecta automaticamente o `render.yaml` e configura o serviço
+3. Defina a variável de ambiente `TWITTER_BEARER_TOKEN` (opcional) no painel
+4. O deploy usa `gunicorn` como servidor WSGI de produção
+
 ---
 
 ## 📊 Como Funciona a Análise
@@ -97,23 +116,25 @@ Cada rede social é analisada **separadamente**, permitindo identificar que uma 
 | **👤 Facebook** | Scraping público + busca web | Bio, página pública, menções |
 | **🌐 Web / Notícias** | DuckDuckGo, Google News, Wikipédia | Notícias, artigos, menções |
 
+> **⚡ Execução paralela:** as quatro fontes são coletadas **simultaneamente** via `ThreadPoolExecutor`, reduzindo o tempo total para ≈ o tempo da coleta mais lenta.
+
 ### Modelo de Classificação
 
 O modelo utiliza **três estratégias combinadas**:
 
-1. **Palavras-chave** — ~45 termos associados à esquerda e ~45 à direita (peso 1 por ocorrência)
-2. **Nomes conhecidos** — ~30 nomes de figuras políticas por lado (peso 2 por menção)
-3. **Figuras seguidas** — ~120 perfis políticos catalogados com score de -2 a +2 (peso 3 por figura)
+1. **Palavras-chave** — 50 termos/frases de esquerda e 50 de direita (peso 1 por palavra simples, 2 por frase composta)
+2. **Nomes conhecidos** — ~56 nomes de esquerda e ~48 de direita para detecção textual (peso 2 por menção)
+3. **Figuras seguidas** — ~430 perfis políticos catalogados com score de -2 a +2 (peso **5× o score** por figura)
 
 ### Escala de Classificação
 
 | Score | Classificação | Exemplo |
 |---|---|---|
-| **-2** | Esquerda forte | PT, PSOL, PCdoB, Lula, Boulos |
-| **-1** | Centro-esquerda | Ciro Gomes, Marina Silva, Carta Capital |
+| **-2** | Esquerda forte | PT, PSOL, PCdoB, Lula, Boulos, Janones, Gleisi |
+| **-1** | Centro-esquerda | Ciro Gomes, Marina Silva, Tabata Amaral, Carta Capital |
 | **0** | Centro | Folha, Estadão, G1, BBC Brasil, CNN Brasil |
-| **1** | Centro-direita | Sérgio Moro, Gazeta do Povo, Jovem Pan |
-| **2** | Direita forte | Bolsonaro, PL, Brasil Paralelo, Revista Oeste |
+| **1** | Centro-direita | Sérgio Moro, Tarcísio, Gazeta do Povo, Jovem Pan |
+| **2** | Direita forte | Bolsonaro, PL, Nikolas, Zambelli, Brasil Paralelo, Revista Oeste |
 
 #### Por que a imprensa recebe score 0 (centro)?
 

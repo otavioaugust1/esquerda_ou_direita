@@ -3,20 +3,29 @@
    ============================================ */
 
 :root {
+    /* Cores de fundo */
     --bg: #0f172a;
     --bg-card: #1e293b;
     --bg-card-hover: #273548;
+    
+    /* Cores de texto */
     --text: #e2e8f0;
     --text-dim: #94a3b8;
     --text-bright: #f1f5f9;
+    
+    /* Cores de destaque */
     --accent: #6366f1;
     --accent-hover: #818cf8;
+    
+    /* Cores de alerta e status */
     --red: #ef4444;
     --red-soft: #fca5a5;
     --blue: #3b82f6;
     --blue-soft: #93c5fd;
     --yellow: #f59e0b;
     --green: #22c55e;
+    
+    /* Espaçamento e efeitos */
     --border: #334155;
     --radius: 12px;
     --radius-sm: 8px;
@@ -984,6 +993,14 @@ input[type="text"]::placeholder {
     color: var(--text-dim);
 }
 
+.fig-fonte {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--accent);
+    margin-top: 2px;
+    opacity: 0.85;
+}
+
 .fig-lado {
     font-size: 0.72rem;
     font-weight: 700;
@@ -1224,13 +1241,15 @@ input[type="text"]::placeholder {
 
 .plat-keywords,
 .plat-figures,
-.plat-sources {
+.plat-sources,
+.plat-evidencias {
     margin-bottom: 20px;
 }
 
 .plat-keywords h4,
 .plat-figures h4,
-.plat-sources h4 {
+.plat-sources h4,
+.plat-evidencias h4 {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-bright);
@@ -1594,6 +1613,19 @@ input[type="text"]::placeholder {
     background: rgba(59, 130, 246, 0.06);
 }
 
+/* Frases compostas (multi-token) — destaque diferenciado */
+.keyword-esq .keyword-cloud span.kw-frase {
+    background: rgba(239, 68, 68, 0.14);
+    border-color: rgba(239, 68, 68, 0.4);
+    font-style: italic;
+}
+
+.keyword-dir .keyword-cloud span.kw-frase {
+    background: rgba(59, 130, 246, 0.14);
+    border-color: rgba(59, 130, 246, 0.4);
+    font-style: italic;
+}
+
 /* FIGURAS: tabela */
 .fig-table-wrap {
     overflow-x: auto;
@@ -1865,4 +1897,283 @@ input[type="text"]::placeholder {
         gap: 12px;
         text-align: center;
     }
+}
+
+/* ============================================ */
+/* EVIDÊNCIAS DE CLASSIFICAÇÃO                  */
+/* ============================================ */
+
+.evidencias-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+}
+
+.evidencias-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.evidencia-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    border-left: 4px solid var(--border);
+}
+
+.evidencia-card.evidencia-esq {
+    border-left-color: var(--red);
+}
+
+.evidencia-card.evidencia-dir {
+    border-left-color: var(--blue);
+}
+
+.evidencia-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.evidencia-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.evidencia-badge.badge-esq {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.evidencia-badge.badge-dir {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.evidencia-tipo {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.evidencia-peso {
+    font-size: 0.68rem;
+    color: var(--accent);
+    margin-left: auto;
+    opacity: 0.8;
+}
+
+.evidencia-termo {
+    font-size: 0.88rem;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+}
+
+.evidencia-trecho {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+.evidencia-fonte-label {
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.evidencia-texto {
+    word-break: break-word;
+}
+
+/* ─── Busca de Deputado Federal ───────────────────────────────────────── */
+
+.dep-search-group {
+    border-top: 1px solid var(--border);
+    padding-top: 12px !important;
+}
+
+.dep-toggle-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    padding: 8px 14px;
+    transition: background 0.2s, border-color 0.2s;
+    width: 100%;
+}
+
+.dep-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--accent);
+}
+
+.dep-toggle-icon {
+    margin-left: auto;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.dep-panel {
+    margin-top: 10px;
+}
+
+.dep-search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.dep-nome-input {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-bright);
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.dep-nome-input:focus {
+    border-color: var(--accent);
+}
+
+.dep-search-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.dep-search-btn:hover {
+    opacity: 0.85;
+}
+
+.dep-results {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.dep-card {
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.dep-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent);
+}
+
+.dep-card-disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.dep-card-disabled:hover {
+    background: var(--card-bg);
+    border-color: var(--border);
+}
+
+.dep-foto {
+    border-radius: 50%;
+    flex-shrink: 0;
+    height: 48px;
+    object-fit: cover;
+    width: 48px;
+}
+
+.dep-foto-placeholder {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 1.4rem;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
+}
+
+.dep-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.dep-nome {
+    color: var(--text-bright);
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dep-partido {
+    color: var(--text-dim);
+    font-size: 0.78rem;
+}
+
+.dep-handle {
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+.dep-handle small {
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    margin-left: 4px;
+}
+
+.dep-sem-rede {
+    color: var(--text-dim) !important;
+}
+
+.dep-loading,
+.dep-error {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+.dep-loading {
+    color: var(--text-dim);
+}
+
+.dep-error {
+    color: var(--yellow, #f5a623);
 }

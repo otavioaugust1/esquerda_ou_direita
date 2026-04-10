@@ -67,14 +67,31 @@ O **Esquerda ou Direita?** é um projeto de **estudo acadêmico** que analisa a 
 
 ### Como funciona
 
-1. **Coleta** — o sistema busca dados públicos do perfil em 3 plataformas (Twitter/X, Instagram, Facebook) + fontes complementares (Google News, Wikipédia, DuckDuckGo)
+1. **Coleta paralela** — o sistema busca dados públícos do perfil em 4 fontes **simultaneamente** via `ThreadPoolExecutor`: Twitter/X, Instagram, Facebook e Web/Notícias (Google News, Wikipédia, DuckDuckGo). O tempo total é equivalente à coleta mais lenta, não a soma de todas.
 2. **Processamento** — o texto coletado é normalizado (sem acentos, minúsculas) e comparado com listas de palavras-chave e nomes de figuras políticas
-3. **Pontuação** — cada ocorrência gera pontos: palavras-chave = 1pt, nomes = 2pt, figuras políticas seguidas = 3× o score da figura
+3. **Pontuação** — cada ocorrência gera pontos: palavras-chave simples = 1pt, nomes = 2pt, frases compostas = 2pt, figuras políticas seguidas = **5× o score da figura** (cada figura contada uma vez)
 4. **Classificação** — a proporção entre pontos de esquerda e direita determina a classificação final e o percentual de confiança
 
 ### Análise por plataforma
 
 Uma pessoa pode ter **comportamento político diferente** em cada rede social. Por isso, cada plataforma é analisada separadamente. O resultado final combina todas as fontes.
+
+---
+
+## 🛠️ Arquitetura do Código
+
+O motor de análise está organizado como um **pacote Python modular**:
+
+| Módulo | Responsabilidade |
+|---|---|
+| `analisador/__init__.py` | Orquestra a execução paralela e consolida os resultados |
+| `analisador/dados.py` | Banco de figuras políticas, palavras-chave e configurações |
+| `analisador/utils.py` | Normalização de texto, filtros de username e busca na web |
+| `analisador/analise.py` | Pontuação por palavras-chave, seguidores e classificação |
+| `analisador/twitter.py` | Coleta Twitter/X: API v2, Nitter e busca web |
+| `analisador/instagram.py` | Coleta Instagram: scraping público e busca web |
+| `analisador/facebook.py` | Coleta Facebook: scraping público e busca web |
+| `analisador/geral.py` | Coleta Web: Google News, Wikipédia, busca genérica |
 
 ---
 
@@ -84,11 +101,11 @@ O modelo foi calibrado manualmente, sem machine learning. A calibração segue e
 
 ### 1. Seleção de figuras de referência
 
-~120 perfis de políticos, jornalistas, influenciadores e veículos de mídia foram classificados manualmente em uma escala de -2 (esquerda forte) a +2 (direita forte).
+**~430 perfis** de políticos (governadores, senadores, deputados federais), partidos, jornalistas, influenciadores, ministérios do governo federal e veículos de mídia foram classificados manualmente em uma escala de -2 (esquerda forte) a +2 (direita forte).
 
 ### 2. Curadoria de palavras-chave
 
-~45 termos associados à esquerda e ~45 termos associados à direita foram selecionados a partir de discursos, hashtags e publicações reais de figuras políticas brasileiras.
+50 termos/frases de esquerda e 50 termos/frases de direita foram selecionados a partir de discursos, hashtags e publicações reais de figuras políticas brasileiras. Palavras ambíguas foram **removidas** para evitar falsos positivos. Os bancos estão **balanceados** (mesma quantidade) para não distorcer resultados.
 
 ### 3. Pesos diferenciados
 
@@ -96,15 +113,16 @@ Nem toda evidência tem o mesmo peso:
 
 | Tipo de Evidência | Peso | Justificativa |
 |---|---|---|
-| Palavra-chave | 1pt | Pode aparecer em contextos variados |
+| Palavra-chave simples | 1pt | Pode aparecer em contextos variados |
 | Nome de figura política | 2pt | Menção direta a uma pessoa conhecida |
-| Figura política seguida | 3× score | Seguir alguém é escolha deliberada |
+| Frase composta detectada | 2pt | Termos específicos multi-palavra |
+| Figura política seguida | 5× score | Seguir alguém é escolha deliberada |
 
-**Seguir uma figura** é mais revelador que uma menção textual — é o indicador mais confiável.
+**Seguir uma figura** é o indicador mais confiável — cada figura é contada apenas uma vez (sem duplicatas).
 
 ### 4. Validação empírica
 
-O modelo foi testado com perfis públicos conhecidos:
+O modelo foi testado com perfis públícos conhecidos (execução paralela):
 
 | Perfil | Resultado Geral | Twitter/X | Instagram | Facebook |
 |---|---|---|---|---|
@@ -127,42 +145,51 @@ Esses resultados validam a coerência do modelo.
 
 | Total de Evidências | Confiança |
 |---|---|
-| ≥ 15 | ALTA |
-| 8–14 | MÉDIA |
-| 3–7 | BAIXA |
-| 0–2 | MUITO BAIXA |
+| < 3 | INCONCLUSIVO |
+| 3–4 | MUITO BAIXA |
+| 5–14 | BAIXA |
+| 15–29 | MÉDIA |
+| ≥ 30 | ALTA |
 
 ---
 
 ## 🔤 Palavras-chave Utilizadas
 
-Cada ocorrência de uma palavra-chave no texto coletado vale **1 ponto** para o lado correspondente. As palavras foram selecionadas por sua associação frequente com discursos de cada espectro político no Brasil.
+Cada ocorrência de uma palavra-chave vale **1 ponto**; frases compostas (com espaço) valem **2 pontos**. Palavras genéricas usadas por ambos os lados foram **removidas** para evitar falsos positivos.
 
-### 🔴 Esquerda (~45 termos)
+### 🔴 Esquerda (50 termos e frases)
 
-`democracia`, `democrático`, `direitos`, `humanos`, `justiça social`, `igualdade`, `trabalhador`, `trabalhadores`, `SUS`, `saúde pública`, `educação`, `feminismo`, `feminista`, `LGBT`, `LGBTQIA`, `diversidade`, `inclusão`, `amazônia`, `indígena`, `quilombola`, `reforma agrária`, `PT`, `PSOL`, `PCdoB`, `socialismo`, `socialista`, `progressista`, `coletivo`, `popular`, `povo`, `antifascismo`, `antifascista`, `resistência`, `redistribuição`, `minorias`, `oprimidos`, `regulação`, `soberania`, `intervenção`, `Lula`, `Dilma`, `Boulos`, `Haddad`, `Janones`, `Freixo`, `Duvivier`, `Sakamoto`
+**Palavras simples — 32 termos (1pt):**  
+`igualdade`, `feminismo`, `feminista`, `LGBTQIA`, `indígena`, `quilombola`, `socialismo`, `socialista`, `progressista`, `antifascismo`, `antifascista`, `redistribuição`, `minorias`, `oprimidos`, `esquerda`, `progressismo`, `inclusão`, `diversidade`, `PSOL`, `PCdoB`, `Lula`, `Dilma`, `Boulos`, `Haddad`, `Janones`, `Freixo`, `Sakamoto`, `vacinação`, `SUS`, `desigualdade`, `trabalhismo`, `trabalhista`
 
-### 🔵 Direita (~45 termos)
+**Frases compostas — 18 termos (2pt):**  
+`saúde pública`, `saúde coletiva`, `política pública`, `políticas públicas`, `assistência social`, `educação pública`, `Bolsa Família`, `saúde mental`, `combate à fome`, `Fome Zero`, `cotas raciais`, `ação afirmativa`, `movimento social`, `movimentos sociais`, `reforma agrária`, `direitos humanos`, `direitos trabalhistas`, `renda básica`
 
-`liberdade econômica`, `livre mercado`, `capitalismo`, `empreendedor`, `empreendedorismo`, `privatização`, `privatizar`, `meritocracia`, `imposto`, `impostos`, `redução`, `família tradicional`, `cristão`, `cristãos`, `conservador`, `conservadorismo`, `direita`, `petismo`, `corrupção`, `patriota`, `patriotismo`, `armamento`, `armas`, `segurança`, `ordem`, `militar`, `agronegócio`, `agro`, `liberal`, `liberalismo`, `propriedade privada`, `anticomunismo`, `anticomunista`, `comunismo`, `doutrinação`, `ideologia de gênero`, `valores`, `moral`, `nação`, `nacionalismo`, `Bolsonaro`, `Moro`, `Nikolas`, `Zambelli`, `Marçal`, `Gayer`
+### 🔵 Direita (50 termos e frases)
 
-### 📝 Nota sobre palavras ambíguas
+**Palavras simples — 30 termos (1pt):**  
+`meritocracia`, `bolsonaro`, `bolsonarismo`, `bolsonarista`, `petismo`, `petista`, `agronegócio`, `neoliberalismo`, `privatismo`, `anticomunismo`, `anticomunista`, `antiesquerda`, `doutrinação`, `globalismo`, `globalista`, `Nikolas`, `Zambelli`, `Marçal`, `Gayer`, `privatização`, `comunismo`, `marxismo`, `marxista`, `conservadorismo`, `olavismo`, `olavista`, `armamentismo`, `petralha`, `mortadela`, `patriotismo`
 
-Algumas palavras como "democracia", "liberdade" e "soberania" são usadas por ambos os lados. Nesta versão, cada termo está associado a apenas um lado com base em sua **frequência de uso predominante** no discurso político brasileiro. Uma versão futura poderia usar pesos fracionários ou análise de contexto.
+**Frases compostas — 20 termos (2pt):**  
+`ideologia de gênero`, `kit gay`, `família tradicional`, `valores conservadores`, `escola sem partido`, `estado mínimo`, `livre mercado`, `voto impresso`, `fraude eleitoral`, `intervenção militar`, `Globo mentira`, `mamãe falei`, `Brasil acima de tudo`, `Deus acima de todos`, `porte de arma`, `imposto é roubo`, `contra o aborto`, `comunismo na educação`, `aparelhamento do estado`, `menos estado`
+
+### 📝 Princípio de especificidade
+
+Palavras como "patriota", "cristão", "empreendedor", "agro", "armado", "popular", "povo", "capitalismo", "conservador" foram **removidas** pois são usadas por ambos os lados e geravam falsos positivos.
 
 ---
 
 ## 👥 Banco de Figuras Políticas
 
-O app contém ~120 perfis classificados manualmente. Quando o sistema identifica que o usuário analisado **segue** uma dessas figuras, o score da figura é multiplicado por **3×** e adicionado à pontuação. Esta é a evidência de maior peso no modelo.
+O app contém **~430 perfis** classificados manualmente: partidos políticos, governadores, senadores, deputados federais (de diversos partidos: PT, PSOL, PCdoB, PSB, PDT, MDB, PSD, PP, PSDB, União Brasil, Republicanos, NOVO, Podemos e PL), lideranças nacionais, ministérios do governo federal e veículos de mídia. Quando o sistema identifica que o usuário seguia uma dessas figuras, o score é multiplicado por **5×** e adicionado à pontuação (cada figura contada uma única vez). Além disso, o sistema mantém **~56 nomes de esquerda** e **~48 nomes de direita** para detecção textual em notícias, bios e publicações (peso 2pt por menção).
 
 | Score | Classificação | Exemplos |
 |---|---|---|
-| **-2** | Esquerda Forte | Lula, Dilma, Boulos, Janones, Gleisi, Freixo, Jean Wyllys, Gregório Duvivier, Jones Manoel, Sabrina Fernandes, Brasil 247, Mídia NINJA, DCM, Opera Mundi |
-| **-1** | Centro-Esquerda | Ciro Gomes, Marina Silva, Flávio Dino, Tabata Amaral, Reinaldo Azevedo, Carta Capital, The Intercept Brasil |
-| **0** | Centro (Imprensa) | Folha de S.Paulo, Estadão, O Globo, G1, UOL, BBC Brasil, CNN Brasil, BandNews, SBT, Record, Jornal Nacional |
-| **+1** | Centro-Direita | Tarcísio, Sérgio Moro, Romeu Zema, Kim Kataguiri, Van Hattem, Alexandre Garcia, Jovem Pan, Gazeta do Povo, O Antagonista |
-| **+2** | Direita Forte | Bolsonaro (família), Nikolas Ferreira, Carla Zambelli, Damares, Pablo Marçal, Rodrigo Constantino, Brasil Paralelo, Revista Oeste, Terça Livre |
+| **-2** | Esquerda Forte | **Partidos:** PT, PCdoB, PSOL · **Governo Lula:** Min. Saúde, Fiocruz, Gov. Federal, Planalto, MEC, Min. Meio Ambiente, Min. Cidades · **Lideranças:** Lula, Dilma, Boulos, Janones, Gleisi, Freixo, Jean Wyllys, Gregório Duvivier, Jones Manoel, Sabrina Fernandes · **Governadores:** Elmano (CE/PT), Jerônimo (BA/PT), Fátima (RN/PT), Camilo Santana, Rafael Fonteles (PI/PT) · **Senadores:** Paulo Paim, Randolfe, Humberto Costa, Jaques Wagner, Fabiano Contarato, Rogério Carvalho · **Deputados:** Sâmia Bomfim, Glauber Braga, Taliria, Fernanda Melchionna, Jandira Feghali, Erika Kokay, Erika Hilton, Luíza Erundina, Benedita da Silva, Perpétua Almeida, Alice Portugal, Léo Péricles, Rui Falcão, Chico Alencar · **Mídia:** Brasil 247, Mídia NINJA, DCM Online, Opera Mundi, Revista Fórum |
+| **-1** | Centro-Esquerda | **Partidos:** PDT, PSB, Rede Sustentabilidade · **Lideranças:** Ciro Gomes, Marina Silva, Flávio Dino, Tabata Amaral, Reinaldo Azevedo, Luís Nassif, Juca Kfouri · **Governadores:** Helder Barbalho (PA), Casagrande (ES), João Campos (Recife), Clécio Luís (AP) · **Senadores:** Renan Calheiros, Omar Aziz, Eliziane Gama, Weverton Rocha · **Mídia:** Carta Capital, The Intercept Brasil |
+| **0** | Centro (Imprensa) | **Partidos:** MDB, PSD, Cidadania, Avante, Solidariedade · **Líderes:** Rodrigo Pacheco, Eduardo Leite (Gov. RS), Ibaneis (Gov. DF), Raquel Lyra (Gov. PE) · **Mídia:** Folha de S.Paulo, Estadão, O Globo, G1, UOL, BBC Brasil, CNN Brasil, BandNews, SBT, Record, Jornal Nacional, Correio Braziliense, Valor Econômico, Agência Senado, Agência Câmara |
+| **+1** | Centro-Direita | **Partidos:** PSDB, União Brasil, Podemos, Republicanos, PP, NOVO · **Lideranças:** Tarcísio (Gov. SP), Sérgio Moro (Sen.), Romeu Zema (Gov. MG), Kim Kataguiri, Van Hattem, Hamilton Mourão · **Governadores:** Ratinho Jr (PR), Caiado (GO), Mauro Mendes (MT), Eduardo Riedel (MS), Wanderlei Barbosa (TO) · **Senadores:** Ciro Nogueira, Marcos Pontes, Efraim Filho · **Deputados:** Arthur Lira (PP/AL), Aécio Neves, Elmar Nascimento, Celso Russomanno, Tiago Mitraud · **Mídia:** Jovem Pan, Gazeta do Povo, O Antagonista, Alexandre Garcia, Leandro Narloch |
+| **+2** | Direita Forte | **Partidos:** PL · **Lideranças:** Bolsonaro (família), Nikolas Ferreira, Carla Zambelli, Damares Alves, Pablo Marçal, Rodrigo Constantino, Allan dos Santos, Bernardo Küster · **Governadores:** Jorginho Mello (SC/PL), Cláudio Castro (RJ/PL) · **Senadores:** Flávio Bolsonaro, Damares, General Girão, Marcos Rogério · **Deputados:** Eduardo Bolsonaro, Bia Kicis, Marco Feliciano, Sóstenes Cavalcante, André Fernandes, Daniel Silveira, Filipe Barros, Gustavo Gayer, Delegado Bilynsky e dezenas de outros do PL · **Mídia:** Brasil Paralelo, Revista Oeste, Terça Livre, Senso Incomum, Conexão Política |
 
 ---
 

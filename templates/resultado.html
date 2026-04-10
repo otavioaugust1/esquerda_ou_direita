@@ -180,6 +180,40 @@
         </div>
         {% endif %}
 
+        <!-- EVIDÊNCIAS DE CLASSIFICAÇÃO -->
+        {% if plat.evidencias %}
+        <div class="plat-evidencias">
+            <h4>🔎 Evidências de Classificação</h4>
+            <p class="evidencias-desc">Cada detecção abaixo mostra o termo identificado e o trecho do texto-fonte que o originou.</p>
+            <div class="evidencias-list">
+                {% for ev in plat.evidencias %}
+                <div class="evidencia-card evidencia-{{ ev.lado }}">
+                    <div class="evidencia-header">
+                        <span class="evidencia-badge {% if ev.lado == 'esq' %}badge-esq{% else %}badge-dir{% endif %}">
+                            {% if ev.lado == 'esq' %}🔴 ESQ{% else %}🔵 DIR{% endif %}
+                        </span>
+                        <span class="evidencia-tipo">
+                            {% if ev.tipo == 'palavra-chave' %}🏷️ Palavra-chave
+                            {% elif ev.tipo == 'frase-chave' %}💬 Frase-chave
+                            {% elif ev.tipo == 'nome-politico' %}👤 Nome político
+                            {% elif ev.tipo == 'seguindo-politico' %}👥 Segue político
+                            {% endif %}
+                        </span>
+                        <span class="evidencia-peso">peso: {{ ev.peso }}×</span>
+                    </div>
+                    <div class="evidencia-termo">
+                        <strong>« {{ ev.termo }} »</strong>
+                    </div>
+                    <div class="evidencia-trecho">
+                        <span class="evidencia-fonte-label">📄 {{ ev.fonte }}:</span>
+                        <span class="evidencia-texto">{{ ev.trecho }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Figuras políticas da plataforma -->
         {% if plat.seguindo_politicos %}
         <div class="plat-figures">
@@ -191,6 +225,9 @@
                     <div class="fig-info">
                         <span class="fig-nome">{{ fig.nome }}</span>
                         <span class="fig-user">@{{ fig.username }}</span>
+                        {% if fig.fonte_deteccao %}
+                        <span class="fig-fonte">📍 {{ fig.fonte_deteccao }}</span>
+                        {% endif %}
                     </div>
                     <div class="fig-lado">
                         {% if fig.score <= -2 %}🔴 ESQ
@@ -343,6 +380,9 @@
             <div class="fig-info">
                 <span class="fig-nome">{{ fig.nome }}</span>
                 <span class="fig-user">@{{ fig.username }}</span>
+                {% if fig.fonte_deteccao %}
+                <span class="fig-fonte">📍 {{ fig.fonte_deteccao }}</span>
+                {% endif %}
             </div>
             <div class="fig-lado">
                 {% if fig.score <= -2 %}🔴 ESQ
