@@ -1,8 +1,11 @@
 """
 Constantes: banco de figuras políticas, palavras-chave e configurações.
+Otimizado para consumo de memória com lazy loading do JSON.
 """
 
+import json
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -11,13 +14,68 @@ load_dotenv()
 TWITTER_BEARER_TOKEN = os.getenv('TWITTER_BEARER_TOKEN', '')
 TIMEOUT = 12
 
+# Cache de lazy loading para FIGURAS_POLITICAS
+_FIGURAS_POLITICAS_CACHE = None
+
+def _carregar_figuras_politicas():
+    """Carrega o banco de figuras políticas do JSON (lazy loading)."""
+    global _FIGURAS_POLITICAS_CACHE
+    if _FIGURAS_POLITICAS_CACHE is not None:
+        return _FIGURAS_POLITICAS_CACHE
+    
+    try:
+        json_path = Path(__file__).parent / 'figuras_politicas.json'
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # Consolidar todos os dicionários em um único objeto
+        figuras = {}
+        for categoria in data.values():
+            figuras.update(categoria)
+        
+        # Converter arrays em tuplas (nome, score) conforme esperado
+        _FIGURAS_POLITICAS_CACHE = {k: tuple(v) for k, v in figuras.items()}
+        return _FIGURAS_POLITICAS_CACHE
+    except Exception as e:
+        print(f"Erro ao carregar figuras políticas: {e}")
+        return {}
+
+# Interface de acesso lazy-loaded
+class _FigurasProxy:
+    """Proxy para acesso lazy ao dicionário de figuras políticas."""
+    def __getitem__(self, key):
+        figuras = _carregar_figuras_politicas()
+        return figuras[key]
+    
+    def __contains__(self, key):
+        figuras = _carregar_figuras_politicas()
+        return key in figuras
+    
+    def keys(self):
+        figuras = _carregar_figuras_politicas()
+        return figuras.keys()
+    
+    def values(self):
+        figuras = _carregar_figuras_politicas()
+        return figuras.values()
+    
+    def items(self):
+        figuras = _carregar_figuras_politicas()
+        return figuras.items()
+    
+    def get(self, key, default=None):
+        figuras = _carregar_figuras_politicas()
+        return figuras.get(key, default)
+
+FIGURAS_POLITICAS = _FigurasProxy()
+
 # =========================
-# BANCO DE FIGURAS POLÍTICAS CONHECIDAS
+# BANCO DE FIGURAS POLÍTICAS CONHECIDAS [original, mantido abaixo para referência]
 # score: -2 = esquerda forte, -1 = centro-esquerda,
 #         0 = centro, 1 = centro-direita, 2 = direita forte
 # =========================
 
-FIGURAS_POLITICAS = {
+_ORIGINAL_FIGURAS_POLITICAS = {
     # ════════════════════════════════════════
     # PARTIDOS POLÍTICOS
     # ════════════════════════════════════════

@@ -2,10 +2,12 @@
 ANÁLISE POLÍTICA — Pacote principal.
 Executa a coleta de todas as plataformas SIMULTANEAMENTE via ThreadPoolExecutor,
 reduzindo drasticamente o tempo de análise total.
+Otimizado para consumo de memória com garbage collection.
 """
 
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import gc
 
 from .analise import classificar
 from .dados import TWITTER_BEARER_TOKEN
@@ -90,7 +92,10 @@ def executar_analise(handle, nome_completo=None, redes_selecionadas=None):
         if key in redes_selecionadas
     }
 
-    with ThreadPoolExecutor(max_workers=len(tarefas) + 1) as executor:
+    # Otimização: limitar workers ao número exato de tasks (reduz overhead de threads)
+    # máximo 3 threads, independente do número de plataformas
+    max_workers = min(len(tarefas) + 1, 3)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submete todas as tarefas ao mesmo tempo (incluindo coleta geral)
         futures = {
             executor.submit(fn, username, nome_completo): key
@@ -217,5 +222,10 @@ def executar_analise(handle, nome_completo=None, redes_selecionadas=None):
         'pontos_esq': total_esq,
         'pontos_dir': total_dir,
     })
+
+    # Otimização: liberar memória após processamento
+    del todos_posts, todos_seguindo, todas_fontes, todos_logs
+    del todas_palavras_esq, todas_palavras_dir, plataformas
+    gc.collect()  # Force garbage collection para evitar vazamentos
 
     return base, None

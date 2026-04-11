@@ -267,9 +267,17 @@ def classificar(pct_esq, pct_dir, total_pontos):
 
 
 def montar_resultado_plataforma(posts, seguindo_politicos=None):
-    """Analisa uma lista de posts e retorna resultado de uma plataforma."""
+    """Analisa uma lista de posts e retorna resultado de uma plataforma.
+    Otimizado: limita posts para reduzir consumo de memória.
+    """
     if seguindo_politicos is None:
         seguindo_politicos = []
+
+    # Otimização: limitar posts para não exceder uso de memória
+    # Manter apenas os 150 primeiros posts
+    MAX_POSTS = 150
+    if len(posts) > MAX_POSTS:
+        posts = posts[:MAX_POSTS]
 
     (
         pts_esq_texto,

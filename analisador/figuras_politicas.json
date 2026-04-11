@@ -1,0 +1,96 @@
+{
+  "partidos_esquerda": {
+    "pt_brasil": ["PT", -2],
+    "ptbrasil": ["PT", -2],
+    "pcdoboficial": ["PCdoB", -2],
+    "psol50": ["PSOL", -2],
+    "psoloficial": ["PSOL", -2]
+  },
+  "partidos_centro_esquerda": {
+    "pdt_oficial": ["PDT", -1],
+    "pdtoficial": ["PDT", -1],
+    "psbnacional": ["PSB", -1],
+    "psb_nacional": ["PSB", -1],
+    "redesustentabilidade": ["Rede Sustentabilidade", -1],
+    "rede_sustentabilidade": ["Rede Sustentabilidade", -1]
+  },
+  "partidos_centro": {
+    "mdbnacional": ["MDB", 0],
+    "mdb_oficial": ["MDB", 0],
+    "psd_oficial": ["PSD", 0],
+    "psdoficial": ["PSD", 0],
+    "cidadaniaoficial": ["Cidadania", 0],
+    "movimentoavante": ["Avante", 0],
+    "solidariedade_br": ["Solidariedade", 0]
+  },
+  "partidos_centro_direita": {
+    "psdb": ["PSDB", 1],
+    "psdb_oficial": ["PSDB", 1],
+    "uniaobrasil": ["União Brasil", 1],
+    "uniao_brasil": ["União Brasil", 1],
+    "podemos_br": ["Podemos", 1],
+    "podemosoficial": ["Podemos", 1],
+    "republicanos10": ["Republicanos", 1],
+    "republicanosbr": ["Republicanos", 1],
+    "pp_progressistas": ["Progressistas", 1],
+    "partidonovo30": ["Partido NOVO", 1]
+  },
+  "partidos_direita": {
+    "pl_brasil": ["PL", 2],
+    "ploficial": ["PL", 2]
+  },
+  "governo_lula": {
+    "minsaude": ["Ministério da Saúde", -2],
+    "ministeriodasaude": ["Ministério da Saúde", -2],
+    "minsaude_": ["Ministério da Saúde", -2],
+    "govbr": ["Governo Federal", -2],
+    "secomgovbr": ["Secom Gov BR", -2],
+    "planalto": ["Palácio do Planalto", -2],
+    "mineducacao": ["MEC", -2],
+    "mec_brasil": ["MEC", -2],
+    "mds_brasil": ["Min. Desenvolvimento Social", -2],
+    "mds_gov": ["Min. Desenvolvimento Social", -2],
+    "agenciabrasil": ["Agência Brasil", -2],
+    "portalsus": ["Portal SUS", -2],
+    "sus_oficial": ["SUS Oficial", -2],
+    "conass_br": ["CONASS", -2],
+    "fiocruz": ["Fiocruz", -2],
+    "fiocruzoficial": ["Fiocruz", -2],
+    "min_meio_ambiente": ["Min. Meio Ambiente", -2],
+    "mcidades_oficial": ["Min. Cidades", -2],
+    "mturismobrasil": ["Min. Turismo", -2]
+  },
+  "governadores_esquerda": {
+    "elmanofreitas": ["Elmano de Freitas (Gov. CE/PT)", -2],
+    "jeronimobt": ["Jerônimo Rodrigues (Gov. BA/PT)", -2],
+    "jeronimorodrigues": ["Jerônimo Rodrigues (Gov. BA/PT)", -2],
+    "rafaelfonteles": ["Rafael Fonteles (Gov. PI/PT)", -2],
+    "fatimabezerra": ["Fátima Bezerra (Gov. RN/PT)", -2],
+    "camilosantana": ["Camilo Santana (Min. Educação/PT)", -2]
+  },
+  "deputados": {
+    "glauberbraga": ["Glauber Braga (Dep. PSOL/RJ)", -2],
+    "taliria": ["Taliria Petrone (Dep. PSOL/RJ)", -2],
+    "fmelchionna": ["Fernanda Melchionna (Dep. PSOL/RS)", -2],
+    "fernandamelchionna": ["Fernanda Melchionna (Dep. PSOL/RS)", -2],
+    "leopericles": ["Léo Péricles (Dep. PSOL/AM)", -2],
+    "erikakokay": ["Erika Kokay (Dep. PT/DF)", -2],
+    "pimenta13": ["Paulo Pimenta (Dep. PT/RS)", -2],
+    "beneditapt": ["Benedita da Silva (Dep. PT/RJ)", -2],
+    "reginaldolopes": ["Reginaldo Lopes (Dep. PT/MG)", -2],
+    "aliceportugal": ["Alice Portugal (Dep. PCdoB/BA)", -2],
+    "chicoalencar": ["Chico Alencar (Dep. PSOL/RJ)", -2],
+    "ruifalcao": ["Rui Falcão (Dep. PT/SP)", -2],
+    "zecadirceu": ["Zeca Dirceu (Dep. PT/PR)", -2],
+    "samiabomfim": ["Sâmia Bomfim (Dep. PSOL/SP)", -2],
+    "andrejanonesadv": ["André Janones (Dep. Avante/MG)", -2],
+    "guilhermeboulos": ["Guilherme Boulos (Dep. PSOL/SP)", -2],
+    "jandirafeghali": ["Jandira Feghali (Dep. PCdoB/RJ)", -2],
+    "marcelofreixo": ["Marcelo Freixo (Dep. PT/RJ)", -2],
+    "josenildopt": ["Josenildo (Dep. PT/AP)", -2],
+    "carlosamedina": ["Carlos Veras (Dep. PT/PE)", -2],
+    "carlosveras": ["Carlos Veras (Dep. PT/PE)", -2],
+    "flavio_bolsonaro": ["Flávio Bolsonaro (Sen. PL/RJ)", 2],
+    "damaresalves": ["Damares Alves (Sen. PL/DF)", 2]
+  }
+}

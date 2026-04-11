@@ -1,6 +1,7 @@
 """
 Coleta de dados do Twitter/X: API v2, Nitter e busca web.
 Verifica existência do perfil ANTES de atribuir dados.
+Otimizado para consumo de memória com limite de posts.
 """
 
 import re
@@ -15,6 +16,9 @@ from .utils import (
     filtrar_resultados_username,
     verificar_perfil_twitter,
 )
+
+# Limite máximo de posts por plataforma (para reduzir uso de memória)
+_LIMITE_POSTS_POR_PLATAFORMA = 150
 
 _RESULTADO_NAO_ENCONTRADO = {
     'total_posts': 0,
