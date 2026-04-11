@@ -116,7 +116,8 @@ def _detalhar_deputado(dep):
         if r.ok:
             dados = r.json().get('dados', {})
             ult = dados.get('ultimoStatus', {})
-            redes = ult.get('urlRedeSocial') or dados.get('urlRedeSocial') or []
+            # BUG FIX: API retorna 'redeSocial', não 'urlRedeSocial'
+            redes = dados.get('redeSocial') or ult.get('redeSocial') or []
             tw, ig = _extrair_handles(redes)
     except Exception:
         pass
@@ -147,7 +148,8 @@ def api_buscar_deputado():
                 return jsonify({'erro': f'Deputado {dep_id} não encontrado'}), 404
             dados = r.json().get('dados', {})
             ult = dados.get('ultimoStatus', {})
-            redes = ult.get('urlRedeSocial') or dados.get('urlRedeSocial') or []
+            # BUG FIX: API retorna 'redeSocial', não 'urlRedeSocial'
+            redes = dados.get('redeSocial') or ult.get('redeSocial') or []
             tw, ig = _extrair_handles(redes)
             resultado = [{
                 'id': dados.get('id'),
