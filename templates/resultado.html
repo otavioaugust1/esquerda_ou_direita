@@ -2,6 +2,13 @@
 {% block title %}Resultado — {{ r.handle }}{% endblock %}
 
 {% block content %}
+<script>
+// Fechar modal de análise IMEDIATAMENTE quando resultado carregar
+if (typeof fecharModalAnalise === 'function') {
+    fecharModalAnalise();
+}
+</script>
+
 <a href="/" class="back-link">← Nova análise</a>
 
 <section class="result-hero" style="border-color: {{ r.cor }}">

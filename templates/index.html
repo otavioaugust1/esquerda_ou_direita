@@ -215,13 +215,160 @@
     </ul>
 </section>
 
+<!-- MODAL DE ANÁLISE EM PROGRESSO -->
+<div id="modalAnalise" class="modal-analise" style="display:none;">
+    <div class="modal-analise-content">
+        <div class="modal-analise-header">
+            <h2>🔍 Analisando Redes Sociais</h2>
+            <p>Aguarde enquanto coletamos e analisamos os dados...</p>
+            <div class="spinner-grande"></div>
+        </div>
+        
+        <div class="curiosidade-container">
+            <div class="curiosidade-card" data-index="0" style="display:block;">
+                <div class="curiosidade-icon">🇫🇷</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Esquerda e Direita</strong> surgiram durante a <strong>Revolução Francesa (1789)</strong>. Na Assembleia Nacional, os deputados pró-monarquia sentavam-se à direita e os reformistas à esquerda. O termo persiste há mais de 230 anos!</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="1">
+                <div class="curiosidade-icon">🏛️</div>
+                <h3>Você sabia?</h3>
+                <p>O <strong>Senado Federal brasileiro</strong> tem 81 senadores. A distribuição atual é: ~30% esquerda, ~25% centro e ~45% direita/centro-direita, mostrando a maioria conservadora.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="2">
+                <div class="curiosidade-icon">📊</div>
+                <h3>Você sabia?</h3>
+                <p>A <strong>Câmara dos Deputados</strong> tem 513 deputados. Não há "centro" verdadeiro — a maioria dos deputados se alinha ao espectro direita/centro-direita nos últimos anos.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="3">
+                <div class="curiosidade-icon">🐦</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Twitter/X é mais polarizado</strong> que Facebook. Estudos mostram que usuários de esquerda e direita têm menos contato mútuo no Twitter, criando "bolhas políticas".</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="4">
+                <div class="curiosidade-icon">🌐</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Redes sociais amplificam posições extremas</strong>. O algoritmo favorece conteúdo polarizador, que gera mais engajamento que conteúdo equilibrado.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="5">
+                <div class="curiosidade-icon">📰</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Imprensa tradicional tende ao centro</strong>. Folha, Globo e Estadão se posicionam como centistas, enquanto blogs e mídias alternativas são mais polarizadas.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="6">
+                <div class="curiosidade-icon">🎓</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Educação correlaciona com alinhamento político</strong>. Pessoas com maior escolaridade tendem a ter posições menos extremas e mais múltiplas perspectivas.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="7">
+                <div class="curiosidade-icon">🗳️</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Voto é melhor preditor que redes sociais</strong>. O que alguém segue online nem sempre reflete seu voto real — há discrepância entre discurso público e ação privada.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="8">
+                <div class="curiosidade-icon">🎭</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Ironia e sarcasmo são invisíveis para análise textual</strong>. Uma pessoa pode criticar uma ideia de esquerda de forma irônica, parecendo apoiadora da direita. Este sistema não detecta isso.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="9">
+                <div class="curiosidade-icon">🇧🇷</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Brasil alternada entre ciclos autoritários e democráticos</strong>. De 1964 a 1985 houve Ditadura Militar, depois redemocratização. Isso moldou diferenças geracionais de posições políticas.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="10">
+                <div class="curiosidade-icon">💬</div>
+                <h3>Você sabia?</h3>
+                <p><strong>O português falado define alinhamento político</strong>. "Bolhas" de esquerda e direita usam termos diferentes para as mesmas realidades (ex: "policiais" vs "PM", "governo Lula" vs "governo PT").</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="11">
+                <div class="curiosidade-icon">📈</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Renda e localização influenciam política</strong>. Pessoas em áreas urbanas podem ter posições diferentes das rurais. Diferenças econômicas também determinam voto com alta precisão.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="12">
+                <div class="curiosidade-icon">🤖</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Este sistema usa PALAVRAS-CHAVE, não IA semântica</strong>. Ele não compreende contexto profundo. Por isso criou-se uma metodologia simples e transparente — fácil de auditar.</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="13">
+                <div class="curiosidade-icon">👥</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Seguidores são mais honestos que tweets</strong>. Analisar quem uma pessoa SEGUE (sua bolha) revela mais que suas publicações (que podem ser performáticas).</p>
+            </div>
+            
+            <div class="curiosidade-card" data-index="14">
+                <div class="curiosidade-icon">⚖️</div>
+                <h3>Você sabia?</h3>
+                <p><strong>Judiciário é o terceiro poder mais polarizado</strong>. STF, TSE e STJ têm ministros com posicionamentos políticos claros — toda decisão é interpretada através de lentes políticas.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.getElementById('formAnalise').addEventListener('submit', function() {
     var btn = document.getElementById('btnSubmit');
     btn.querySelector('.btn-text').style.display = 'none';
     btn.querySelector('.btn-loading').style.display = 'inline-flex';
     btn.disabled = true;
+    // Mostrar modal
+    mostrarModalAnalise();
 });
+
+// ─── Modal de Análise em Progresso ────────────────────────────────────────
+var intervaloCarrossel = null;
+var cartasVistas = [];
+
+function mostrarModalAnalise() {
+    document.getElementById('modalAnalise').style.display = 'flex';
+    cartasVistas = [];
+    exibirCartaAleatoria();
+    // Trocar carta a cada 5 segundos
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+    intervaloCarrossel = setInterval(exibirCartaAleatoria, 10000);
+}
+
+function fecharModalAnalise() {
+    document.getElementById('modalAnalise').style.display = 'none';
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+}
+
+function exibirCartaAleatoria() {
+    var cartas = document.querySelectorAll('.curiosidade-card');
+    var cartasDisponiveis = Array.from(cartas).filter(function(c) {
+        return !cartasVistas.includes(c.dataset.index);
+    });
+    
+    // Se já viu todas, reseta
+    if (cartasDisponiveis.length === 0) {
+        cartasVistas = [];
+        cartasDisponiveis = Array.from(cartas);
+    }
+    
+    // Sortear carta aleatória
+    var indiceAleatorio = Math.floor(Math.random() * cartasDisponiveis.length);
+    var cartaSelecionada = cartasDisponiveis[indiceAleatorio];
+    var index = cartaSelecionada.dataset.index;
+    cartasVistas.push(index);
+    
+    // Mostrar apenas a carta selecionada
+    cartas.forEach(function(c) { c.style.display = 'none'; });
+    cartaSelecionada.style.display = 'block';
+}
+
 
 // ─── Busca de Deputado Federal ────────────────────────────────────────────
 function toggleDepSearch() {
